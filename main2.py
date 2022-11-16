@@ -42,23 +42,29 @@ class App:
             self.DATA = stbl[1]
 
             if lang == LANGS[self.lang]:
+
+                i = 0
+                totalchar = 0
+
+                for key in self.KEYS:
+                    totalchar += len(self.DATA[i][1])
+                    i = i + 1
+
                 f = helpers.BinPacker(bytes())
                 f.put_strz('STBL')
-                print(len(self.KEYS))
-
                 f.put_uint16(5)  # Version
                 f.put_uint8(0)  # Compressed
-                f.put_uint64(808)  # numEntries
+                f.put_uint64(len(self.KEYS))  # numEntries
                 f.put_uint16(0)  # Flag
-                f.put_uint32(55621)  # mnStringLength
+                f.put_uint32(totalchar)  # mnStringLength
 
                 i = 0
                 for key in self.KEYS:
-                    nbChar = len("DATA TEST")
+                    nbChar = len(self.DATA[i][1])
                     f.put_uint32(key)  # HASH
                     f.put_uint8(0)  # FLAG
                     f.put_uint16(nbChar)  # NB CHAR
-                    f.put_strz("DATA TEST")  # DATA
+                    f.put_strz(self.DATA[i][1])  # DATA
 
                     i = i + 1
 
