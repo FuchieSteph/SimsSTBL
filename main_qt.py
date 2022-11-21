@@ -3,19 +3,19 @@ import sys
 
 import PyQt6
 from PyQt6 import QtGui, QtWidgets, QtCore
+from PyQt6.QtCore import QDir, QFile, QFileInfo, QSortFilterProxyModel
 from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
+from PyQt6.QtCore import QSettings
 
 from s4py.package import *
 
 import csv
-from libs.definitions import LANGS, LANG_LIST
+from libs.definitions import LANGS, LANG_LIST, STATE_LIST
 from libs import helpers
 from libs.stbl import StblReader
 from libs.tables import TableModel, get_translation, map_to_json
-
-import numpy as np
 
 
 class App(QMainWindow):
@@ -24,9 +24,39 @@ class App(QMainWindow):
 
     def __init__(self, *args, **kwargs):
         super(App, self).__init__(*args, **kwargs)  # forward to 'super' __init__()
+        self.setWindowTitle("Sims 4 Mod Translator")
 
         self.DATA = {'keys': [], 'data': [], 'base': []}
+        self.settings = self.initSettings()
+        self.dirpath = self.settings.value("DatabasePath")
+        self.filepath = None
+        self.params = None
+        self.proxy_model = None
+
         self.initUI()
+
+    def initSettings(self):
+        settings = QSettings("SimsStbl", "settings")
+
+        if settings.value("DatabasePath") == None:
+            settings.setValue("DatabasePath", QDir().currentPath() + '/database')
+
+        return settings
+
+    def checkDatabase(self):
+        filename = QFileInfo(self.filepath).fileName().split('.')[0]
+
+        if os.path.exists(self.dirpath + '/' + filename + '_' + self.lang + '.json'):
+            choice = self.raiseMessage('A translation was detected in the database : ',
+                                       'Would you like to load it ?', 0)
+
+            if choice == 0:
+                return False
+
+            return self.dirpath + '/' + filename + '_' + self.lang + '.json'
+
+        else:
+            return False
 
     def createButton(self, frame, text, func):
         button = QtWidgets.QPushButton(frame)
@@ -38,9 +68,12 @@ class App(QMainWindow):
 
     def createMenuElement(self, icon, text, shortcut, desc, action, menu):
         loadAct = QAction(QIcon(icon), text, self)
-        loadAct.setShortcut(shortcut)
+
+        if shortcut:
+            loadAct.setShortcut(shortcut)
+
         loadAct.setStatusTip(desc)
-        loadAct.triggered.connect(action)
+        loadAct.triggered.connect(lambda: action)
         menu.addAction(loadAct)
 
     def export_package(self):
@@ -157,17 +190,17 @@ class App(QMainWindow):
         self.statusBar()
 
     def load_package(self):
-        self.filepath = QFileDialog.getOpenFileName(self, 'Open file', '', "Package sfiles (*.package)")[0]
+        self.filepath = QFileDialog.getOpenFileName(self, 'Open file', '', "Packages files (*.package)")[0]
 
         if self.filepath == '':
             return
 
         self.lang = QInputDialog.getItem(self, "select input dialog", "Select the lang", LANG_LIST, 5, False)[0]
+
         self.readPackage()
 
     def load_table(self):
         header = ['ID', 'Original Text', 'Translated Text', 'State']
-
         self.model = TableModel(self.DATA, header)
         self.table.setModel(self.model)
         self.table.horizontalHeader().setSectionResizeMode(0, PyQt6.QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
@@ -179,6 +212,17 @@ class App(QMainWindow):
         self.table.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
         self.table.customContextMenuRequested['QPoint'].connect(self.show_table_menu)
 
+        loadTranslation = self.checkDatabase()
+
+        if loadTranslation:
+            self.load_translation(loadTranslation)
+
+        self.proxy_model = QSortFilterProxyModel()
+        self.proxy_model.setFilterKeyColumn(3)
+
+        self.proxy_model.setSourceModel(self.model)
+        self.table.setModel(self.proxy_model)
+
         if not self.loaded:
             self.createButton(self.left_frame, "Load Translation", self.load_translation)
             self.createButton(self.left_frame, "Export Translation", self.export_translation)
@@ -186,9 +230,11 @@ class App(QMainWindow):
             self.loaded = True
 
         self.setCentralWidget(self.centralwidget)
+        self.load_toolbar()
 
-    def load_translation(self):
-        path = QFileDialog.getOpenFileName(self, 'Load Translation', '', "Json (*.json)")[0]
+    def load_translation(self, path=None):
+        if path is None:
+            path = QFileDialog.getOpenFileName(self, 'Load Translation', '', "Json (*.json)")[0]
 
         if self.filepath == '':
             return
@@ -200,6 +246,19 @@ class App(QMainWindow):
                     self.model.replaceData(str['id'], str)
             except:
                 self.raiseMessage('The file is invalid, please try with another file', '', 1)
+
+    def load_toolbar(self):
+        toolbar = QToolBar("My main toolbar")
+        self.addToolBar(toolbar)
+
+        self.createMenuElement(None, 'Filter Validated', '', 'Filter Validated Strings', self.filterState(2), toolbar)
+        self.createMenuElement(None, 'Filter UnValidated', '', 'Filter Unvalidated Strings', self.filterState(0),
+                               toolbar)
+        self.createMenuElement(None, 'Filter Unknown', '', 'Filter Unknown Strings', self.filterState(1), toolbar)
+
+    def filterState(self, state):
+        if state:
+            self.proxy_model.setFilterFixedString(STATE_LIST[state])
 
     def load_ui(self):
         self.table = QtWidgets.QTableView(self.right_frame)
@@ -228,8 +287,8 @@ class App(QMainWindow):
 
             self.messageBox.setWindowTitle('Warning')
             self.messageBox.setIcon(QMessageBox.Icon.Warning)
-            self.messageBox.addButton("Yes", QMessageBox.ButtonRole.YesRole)
             self.messageBox.addButton("No", QMessageBox.ButtonRole.NoRole)
+            self.messageBox.addButton("Yes", QMessageBox.ButtonRole.YesRole)
 
         return self.messageBox.exec()
 
@@ -307,14 +366,9 @@ class App(QMainWindow):
             f.close()
 
     def update_settings(self):
-        TestQFileDialog = QDialog()
-
-        self.toolButtonOpenDialog = QToolButton(TestQFileDialog)
-
-        self.lineEdit = QLineEdit(TestQFileDialog)
-        self.lineEdit.setEnabled(False)
-
-        QtCore.QMetaObject.connectSlotsByName(TestQFileDialog)
+        if self.params is None:
+            self.params = SettingsWindow()
+        self.params.show()
 
 
 class SettingsWindow(QWidget):
@@ -325,13 +379,60 @@ class SettingsWindow(QWidget):
 
     def __init__(self):
         super().__init__()
+        self.settings = QSettings("SimsStbl", "settings")
+        self.initUi()
+
+    def initUi(self):
         layout = QVBoxLayout()
-        self.label = QLabel("Another Window")
-        layout.addWidget(self.label)
-        self.setLayout(layout)
+        self.resize(602, 100)
+
+        ##VERTICAL LAYOUT
+        self.verticalLayout = QtWidgets.QVBoxLayout(self)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.verticalLayout.setContentsMargins(9, 0, -1, 9)
+
+        ##LABEL
+        self.label = QtWidgets.QLabel(self)
+        self.label.setText('Translations directory')
+        self.verticalLayout.addWidget(self.label)
+
+        ##HORIZONTAL LAYOUT
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setContentsMargins(0, 0, -1, 9)
+
+        self.lineEdit = QtWidgets.QLineEdit(self)
+        self.lineEdit.setText(self.settings.value("DatabasePath"))
+
+        self.horizontalLayout.addWidget(self.lineEdit)
+        self.browseButton = QtWidgets.QToolButton(self)
+        self.browseButton.clicked.connect(self.setDirectory)
+        self.browseButton.setText('...')
+        self.horizontalLayout.addWidget(self.browseButton)
+
+        self.verticalLayout.addLayout(self.horizontalLayout)
+
+        ##BUTTON BOX
+        self.buttonBox = QtWidgets.QDialogButtonBox(self)
+        self.buttonBox.setOrientation(QtCore.Qt.Orientation.Horizontal)
+        self.buttonBox.setStandardButtons(
+            QtWidgets.QDialogButtonBox.StandardButton.Save)
+        self.buttonBox.clicked.connect(self.close)
+
+        self.buttonBox.setObjectName("buttonBox")
+        self.verticalLayout.addWidget(self.buttonBox)
+
+    def setDirectory(self):
+        self.dirpath = QFileDialog.getExistingDirectory(self, 'Open file', self.settings.value("DatabasePath"))
+
+        if self.dirpath != '':
+            self.lineEdit.setText(self.dirpath)
+
+        self.settings.setValue("DatabasePath", self.dirpath)
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    app.setStyle('Material')
     ex = App()
+
     sys.exit(app.exec())

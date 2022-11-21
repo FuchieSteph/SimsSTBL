@@ -79,3 +79,12 @@ def get_translation(n):
 
 def map_to_json(n):
     return {"id": n[0], 'base': n[1], 'translation': n[2], 'state': n[3]}
+
+
+class MyProxyModel(QSortFilterProxyModel):
+    def __init__(self):
+        super(MyProxyModel, self).__init__()
+        self.searchText = None
+
+    def filterState(self, state):
+        return

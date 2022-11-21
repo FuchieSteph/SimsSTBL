@@ -12,7 +12,7 @@ class StblReader:
         char_count = 0
 
         for _ in range(len(self.DATA['keys'])):
-            if choice == 1:
+            if choice == 0:
                 self.DATA['data'][i][2] = ''
 
             else:
@@ -42,7 +42,6 @@ class StblReader:
 
         i = 0
         char_count = 0
-        print(numEntries)
 
         for _ in range(numEntries):
             keyHash = f.get_uint32()
