@@ -1,106 +1,241 @@
-import shutil
-from tkinter import filedialog
-from tkinter.messagebox import showinfo
+import json
+import sys
 
-import customtkinter
-import tksheet
+import PyQt6
+from PyQt6 import QtGui, QtWidgets, QtCore
+from PyQt6.QtGui import QAction, QIcon
+from PyQt6.QtWidgets import *
+from PyQt6.QtGui import *
+
 from s4py.package import *
 
 import csv
-from definitions import LANGS, LANG_LIST
+from libs.definitions import LANGS, LANG_LIST
 from libs import helpers
-from libs.stbl import readStbl
+from libs.stbl import StblReader
+from libs.tables import TableModel, get_translation, map_to_json
+
+import numpy as np
 
 
-class App(customtkinter.CTk):
+class App(QMainWindow):
     APP_NAME = "map_view_demo.py"
+    loaded = False
 
     def __init__(self, *args, **kwargs):
-        super().__init__()
+        super(App, self).__init__(*args, **kwargs)  # forward to 'super' __init__()
 
-        self.width = self.winfo_screenwidth()
-        self.height = self.winfo_screenheight()
-        center_x = int(self.width / 2 - self.width / 2)
-        center_y = int(self.height / 2 - self.height / 2)
+        self.DATA = {'keys': [], 'data': [], 'base': []}
+        self.initUI()
 
-        self.title(self.APP_NAME)
-        self.geometry(f'{self.width}x{self.height}+{center_x}+{center_y}')
-        self.protocol("WM_DELETE_WINDOW", self.on_closing)  # call .on_closing() when app gets closed
+    def createButton(self, frame, text, func):
+        button = QtWidgets.QPushButton(frame)
+        button.setText(text)
+        button.clicked.connect(func)
+        button.setObjectName(text)
+        button.setStyleSheet("padding:10px")
+        self.left_container.addWidget(button)
 
-        self.frame_left = customtkinter.CTkFrame(master=self,
-                                                 width=180,
-                                                 corner_radius=0)
+    def createMenuElement(self, icon, text, shortcut, desc, action, menu):
+        loadAct = QAction(QIcon(icon), text, self)
+        loadAct.setShortcut(shortcut)
+        loadAct.setStatusTip(desc)
+        loadAct.triggered.connect(action)
+        menu.addAction(loadAct)
 
-        self.frame_left.grid(row=0, column=0, sticky="nswe")
-        self.frame_left.grid_rowconfigure(0, minsize=10)
-
-
-        ####DEFINE LEFT FRAME######
-        self.title = customtkinter.CTkLabel(master=self.frame_left,
-                                            text="CustomTkinter",
-                                            text_font=("Roboto Medium", -16))  # font name and size in px
-        self.title.grid(row=1, column=0, pady=10, padx=10)
-
-        self.combobox_lang = customtkinter.CTkComboBox(master=self.frame_left,
-                                                       values=LANG_LIST,
-                                                       command=self.define_lang)
-
-        self.combobox_lang.set("Lang")  # set initial value
-        self.combobox_lang.grid(row=2, column=0, pady=10, padx=20)
-
-        self.button_open = customtkinter.CTkButton(master=self.frame_left,
-                                                   text="Open package",
-                                                   command=self.upload_file)
-
-        self.button_open.grid(row=3, column=0, pady=10, padx=5)
-
-        #####DEFINE RIGHT FRAME///////
-        self.frame_right = customtkinter.CTkFrame(master=self)
-        self.frame_right.grid(row=0, column=1, sticky="nswe", padx=20, pady=20)
-
-        self.sheet = tksheet.Sheet(self.frame_right, width=800, height=600)
-        self.sheet.grid()
-        self.sheet.enable_bindings(("single_select",
-                                    "row_select",
-                                    "column_width_resize",
-                                    "arrowkeys",
-                                    "right_click_popup_menu",
-                                    "rc_select",
-                                    "rc_insert_row",
-                                    "rc_delete_row",
-                                    "copy",
-                                    "cut",
-                                    "paste",
-                                    "delete",
-                                    "undo",
-                                    "edit_cell"))
-
-        self.STRINGS = {}
-        self.DATA = []
-        self.lang = ''
-        self.filepath = ''
-        self.package = None
-
-    def define_lang(self, choice):
-        self.lang = choice
-        print(self.lang)
-
-    def upload_file(self):
-        global img
-        f_types = [('Package File', '*.package')]
-        self.filepath = filedialog.askopenfilename(filetypes=f_types)
-
+    def export_package(self):
         try:
-            self.readPackage()
+            filename = self.filepath.replace('.package', '_' + self.lang + '.package')
         except:
-            print('Error while reading file')
-            raise
+            filename = "translation"
+
+        export_path = QFileDialog.getSaveFileName(self, 'Open file', filename, "Package (*.package)")
+        if export_path[0] == '':
+            return
+
+        dbfile2 = open_package(export_path[0], 'w')
+        data = list(map(get_translation, self.model._data))
+
+        i = 0
+        totalchar = 0
+
+        for key in self.DATA['keys']:
+            totalchar += len(data[i].encode('utf-8'))
+            i = i + 1
+
+        f = helpers.BinPacker(bytes())
+        f.put_strz('STBL')
+        f.put_uint16(5)  # Version
+        f.put_uint8(0)  # Compressed
+        f.put_uint64(len(self.DATA['keys']))  # numEntries
+        f.put_uint16(0)  # Flag
+        f.put_uint32(totalchar)  # mnStringLength
+
+        i = 0
+        for key in self.DATA['keys']:
+            nbChar = len(data[i].encode('utf-8'))
+            f.put_uint32(key)  # HASH
+            f.put_uint8(0)  # FLAG
+            f.put_uint16(nbChar)  # NB CHAR
+            f.put_strz(data[i])  # DATA
+
+            i = i + 1
+
+        f.raw.seek(0)
+        dbfile2.put(self.package.id, f.raw.getvalue())
+        dbfile2.commit()
+        f.close()
+
+    def export_translation(self):
+        try:
+            filename = self.filepath.split('.')[0]
+        except:
+            filename = "translation"
+
+        export_path = QFileDialog.getSaveFileName(self, 'Open file', filename + '.csv', "CSV (*.csv)")
+
+        if export_path[0] == '':
+            return
+
+        with open(export_path[0], 'w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f, delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
+            writer.writerow(['KEY', 'EN', 'FR'])
+            writer.writerows(self.model._data)
+            f.close()
+
+    def initUI(self):
+        self.load_menu()
+        self.load_base_layout()
+        self.load_ui()
+        self.showMaximized()
+        self.show()
+
+    def load_base_layout(self):
+        # DEFINE CENTRAL WIDGET
+        self.centralwidget = QtWidgets.QWidget(self)
+        self.centralwidget.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
+        self.centralwidget.setAutoFillBackground(False)
+
+        # SET BASE LAYOUT
+        self.baseLayout = QtWidgets.QVBoxLayout(self.centralwidget)
+
+        # CREATE MAIN GRID
+        self.main_grid = QtWidgets.QGridLayout()
+        self.main_grid.setSizeConstraint(QtWidgets.QLayout.SizeConstraint.SetMaximumSize)
+
+        # RIGHT MENU
+        self.right_frame = QtWidgets.QFrame(self.centralwidget)
+        self.right_container = QtWidgets.QVBoxLayout(self.right_frame)
+
+        # LEFT MENU
+        self.left_frame = QtWidgets.QFrame(self.centralwidget)
+        self.left_container = QtWidgets.QVBoxLayout(self.left_frame)
+        self.left_container.setSpacing(6)
+
+    def load_menu(self):
+        menubar = self.menuBar()
+        self.fileMenu = menubar.addMenu('&File')
+        self.settingsMenu = menubar.addMenu('&Settings')
+
+        self.createMenuElement('exit.png', '&Load Package', 'Ctrl+O', 'Load a package file', self.load_package,
+                               self.fileMenu)
+
+        self.createMenuElement('exit.png', '&Save Translation', 'Ctrl+S', 'Save Translation', self.save_translation,
+                               self.fileMenu)
+
+        self.createMenuElement('exit.png', '&Load Translation', 'Ctrl+S', 'Load Translation', self.load_translation,
+                               self.fileMenu)
+
+        self.createMenuElement('exit.png', '&Load Package', 'Ctrl+Q', 'Load a package file',
+                               QApplication.instance().quit,
+                               self.fileMenu)
+
+        self.createMenuElement('exit.png', '&Settings', 'Ctrl+Q', 'Settings',
+                               self.update_settings,
+                               self.settingsMenu)
+
+        self.statusBar()
+
+    def load_package(self):
+        self.filepath = QFileDialog.getOpenFileName(self, 'Open file', '', "Package sfiles (*.package)")[0]
+
+        if self.filepath == '':
+            return
+
+        self.lang = QInputDialog.getItem(self, "select input dialog", "Select the lang", LANG_LIST, 5, False)[0]
+        self.readPackage()
+
+    def load_table(self):
+        header = ['ID', 'Original Text', 'Translated Text', 'State']
+
+        self.model = TableModel(self.DATA, header)
+        self.table.setModel(self.model)
+        self.table.horizontalHeader().setSectionResizeMode(0, PyQt6.QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+        self.table.horizontalHeader().setSectionResizeMode(1, PyQt6.QtWidgets.QHeaderView.ResizeMode.Stretch)
+        self.table.horizontalHeader().setSectionResizeMode(2, PyQt6.QtWidgets.QHeaderView.ResizeMode.Stretch)
+        self.table.horizontalHeader().setSectionResizeMode(3, PyQt6.QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+        self.table.setSelectionBehavior(PyQt6.QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows)
+
+        self.table.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
+        self.table.customContextMenuRequested['QPoint'].connect(self.show_table_menu)
+
+        if not self.loaded:
+            self.createButton(self.left_frame, "Load Translation", self.load_translation)
+            self.createButton(self.left_frame, "Export Translation", self.export_translation)
+            self.createButton(self.left_frame, "Export Package", self.export_package)
+            self.loaded = True
+
+        self.setCentralWidget(self.centralwidget)
+
+    def load_translation(self):
+        path = QFileDialog.getOpenFileName(self, 'Load Translation', '', "Json (*.json)")[0]
+
+        if self.filepath == '':
+            return
+
+        with open(path, 'r') as f:
+            data = json.load(f)
+            try:
+                for str in data['strings']:
+                    self.model.replaceData(str['id'], str)
+            except:
+                self.raiseMessage('The file is invalid, please try with another file', '', 1)
+
+    def load_ui(self):
+        self.table = QtWidgets.QTableView(self.right_frame)
+        self.right_container.addWidget(self.table)
+        self.main_grid.addWidget(self.right_frame, 0, 1, 1, 1)
+
+        ## LOAD BUTTONS
+        self.createButton(self.left_frame, "Load Package", self.load_package)
+
+        self.main_grid.addWidget(self.left_frame, 0, 0, 1, 1, QtCore.Qt.AlignmentFlag.AlignTop)
+        self.baseLayout.addLayout(self.main_grid)
+
+        self.setCentralWidget(self.centralwidget)
+
+    def raiseMessage(self, message, informativeMessage, error):
+
+        if error:
+            self.messageBox = QtWidgets.QMessageBox.warning(self, "Error", message, QMessageBox.StandardButton.Ok)
+
+        else:
+            self.messageBox = QtWidgets.QMessageBox()
+            self.messageBox.setText(message)
+
+            if informativeMessage != '':
+                self.messageBox.setInformativeText(informativeMessage)
+
+            self.messageBox.setWindowTitle('Warning')
+            self.messageBox.setIcon(QMessageBox.Icon.Warning)
+            self.messageBox.addButton("Yes", QMessageBox.ButtonRole.YesRole)
+            self.messageBox.addButton("No", QMessageBox.ButtonRole.NoRole)
+
+        return self.messageBox.exec()
 
     def readPackage(self):
         dbfile = open_package(self.filepath)
-
-        self.STRINGS = {}
-        self.DATA = []
+        match = False
 
         for entry in dbfile.scan_index(None):
             idx = dbfile[entry]
@@ -111,113 +246,92 @@ class App(customtkinter.CTk):
             if type != "220557da" or (lang != LANGS[self.lang] and lang != LANGS['ENG_US']):
                 continue
 
+            if lang == LANGS[self.lang]:
+                match = True
+
             content = idx.content
             current_lang = list(LANGS.keys())[list(LANGS.values()).index(lang)]
-            stbl = readStbl(content, self.DATA)
+            stbl_reader = StblReader(content, self.DATA, lang == LANGS[self.lang])
+            self.DATA = stbl_reader.readStbl()
 
             self.package = idx
-            self.KEYS = stbl[0]
-            self.DATA = stbl[1]
 
-        self.initSheets()
+        if not match:
+            choice = self.raiseMessage('This package doesn\'t contain the following strings : ' + self.lang,
+                                       'Would you like to copy the English strings ?', 0)
 
-    def initSheets(self):
-        self.sheet.set_sheet_data(self.DATA)
-        self.sheet.set_all_cell_sizes_to_text()
-        self.sheet.redraw(redraw_header=True, redraw_row_index=True)
+            stbl_reader = StblReader(None, self.DATA, None)
+            self.DATA = stbl_reader.loadEmptyStrings(choice)
 
-        self.button_2 = customtkinter.CTkButton(master=self.frame_left,
-                                                text="Load translation",
-                                                command=self.import_csv)
-        self.button_2.grid(row=4, column=0, padx=10, pady=5)
+        self.load_table()
 
-        self.button_3 = customtkinter.CTkButton(master=self.frame_left,
-                                                text="Export to CSV",
-                                                command=self.export_csv)
-        self.button_3.grid(row=5, column=0, padx=10, pady=5)
+    def show_table_menu(self, pos):
+        if self.table.selectionModel().selection().indexes():
+            menu = QMenu()
+            validateAction = menu.addAction("Set strings as Validated")
+            unvalidatedAction = menu.addAction("Set strings as Unvalidated")
+            revisionAction = menu.addAction("Set strings as Revision")
+            state = -1
 
-        self.button_4 = customtkinter.CTkButton(master=self.frame_left,
-                                                text="Export translation",
-                                                command=self.export_translation)
-        self.button_4.grid(row=6, column=0, padx=10, pady=5)
+            action = menu.exec(self.mapToGlobal(pos))
 
-    def export_csv(self):
-        self.export_path = filedialog.askdirectory()
+            if action == validateAction:
+                state = 2
 
+            elif action == unvalidatedAction:
+                state = 0
+
+            elif action == revisionAction:
+                state = 1
+
+            if state > -1:
+                for i in self.table.selectionModel().selectedRows():
+                    self.model.updateState(i.row(), state)
+
+    def save_translation(self):
         try:
-            filename = self.filepath.split('/')[-1].split('.')[0]
+            filename = self.filepath.split('.')[0]
         except:
             filename = "translation"
 
-        with open(self.export_path + "/" + filename + '.csv', 'a', newline='', encoding='utf-8') as f:
-            writer = csv.writer(f, delimiter=';', quotechar='"', quoting=csv.QUOTE_ALL)
-            writer.writerow(['KEY', 'EN', 'FR'])
-            writer.writerows(self.DATA)
+        export_path = QFileDialog.getSaveFileName(self, 'Save file', filename + '_' + self.lang + '.json',
+                                                  "JSON (*.json)")
 
-        showinfo('Success', 'The file has correctly been exported')
+        if export_path[0] == '':
+            return
 
-    def import_csv(self):
-        import_path = filedialog.askopenfile()
+        with open(export_path[0], 'w', newline='', encoding='utf-8') as f:
+            data = {'lang': self.lang, 'strings': list(map(map_to_json, self.model._data))}
+            f.seek(0)
+            json.dump(data, f, sort_keys=True, indent=4)
+            f.close()
 
-        with import_path as csvfile:
-            spamreader = csv.reader(csvfile, delimiter=';', quotechar='|')
-            for row in spamreader:
-                print(', '.join(row))
+    def update_settings(self):
+        TestQFileDialog = QDialog()
 
-    def export_translation(self):
-        self.export_path = filedialog.askdirectory()
+        self.toolButtonOpenDialog = QToolButton(TestQFileDialog)
 
-        try:
-            filename = self.filepath.split('/')[-1].split('.')[0]
-        except:
-            filename = "translation"
+        self.lineEdit = QLineEdit(TestQFileDialog)
+        self.lineEdit.setEnabled(False)
 
-        dbfile2 = open_package(self.export_path + "/" + filename + '.package'.replace('.package', '_'+self.lang+'.package'), 'w')
-        data = self.sheet.get_column_data(1, return_copy=True)
+        QtCore.QMetaObject.connectSlotsByName(TestQFileDialog)
 
-        i = 0
-        totalchar = 0
 
-        for key in self.KEYS:
-            totalchar += len(data[i].encode('utf-8'))
-            i = i + 1
+class SettingsWindow(QWidget):
+    """
+    This "window" is a QWidget. If it has no parent, it
+    will appear as a free-floating window as we want.
+    """
 
-        f = helpers.BinPacker(bytes())
-        f.put_strz('STBL')
-        f.put_uint16(5)  # Version
-        f.put_uint8(0)  # Compressed
-        f.put_uint64(len(self.KEYS))  # numEntries
-        f.put_uint16(0)  # Flag
-        f.put_uint32(totalchar)  # mnStringLength
-
-        i = 0
-        for key in self.KEYS:
-            nbChar = len(data[i].encode('utf-8'))
-            print(nbChar)
-            f.put_uint32(key)  # HASH
-            f.put_uint8(0)  # FLAG
-            f.put_uint16(nbChar)  # NB CHAR
-            f.put_strz(data[i])  # DATA
-            if i == 0:
-                print(f.raw.getvalue())
-
-            i = i + 1
-
-        f.raw.seek(0)
-        dbfile2.put(self.package.id, f.raw.getvalue())
-        dbfile2.commit()
-
-        showinfo('Success', 'The file has correctly been exported')
-
-    def on_closing(self, event=0):
-        self.destroy()
-        exit()
-
-    def start(self):
-        # self.readPackage()
-        self.mainloop()
+    def __init__(self):
+        super().__init__()
+        layout = QVBoxLayout()
+        self.label = QLabel("Another Window")
+        layout.addWidget(self.label)
+        self.setLayout(layout)
 
 
 if __name__ == "__main__":
-    app = App()
-    app.start()
+    app = QApplication(sys.argv)
+    ex = App()
+    sys.exit(app.exec())

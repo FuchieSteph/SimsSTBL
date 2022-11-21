@@ -2,7 +2,7 @@ import shutil
 
 from s4py.package import *
 
-from definitions import LANGS
+from libs.definitions import LANGS
 from libs import helpers
 from libs.stbl import readStbl
 
@@ -47,7 +47,7 @@ class App:
                 totalchar = 0
 
                 for key in self.KEYS:
-                    totalchar += len(self.DATA[i][1])
+                    totalchar += len(self.DATA[i][1].encode('utf-8'))
                     i = i + 1
 
                 f = helpers.BinPacker(bytes())
@@ -60,18 +60,15 @@ class App:
 
                 i = 0
                 for key in self.KEYS:
-                    nbChar = len(self.DATA[i][1])
+                    nbChar = len("é".encode('utf-8'))
                     f.put_uint32(key)  # HASH
                     f.put_uint8(0)  # FLAG
                     f.put_uint16(nbChar)  # NB CHAR
-                    f.put_strz(self.DATA[i][1])  # DATA
+                    f.put_strz("é")  # DATA
 
                     i = i + 1
 
                 f.raw.seek(0)
-                print(content)
-                print(f.raw.getvalue())
-
                 dbfile2.put(idx.id, f.raw.getvalue())
                 dbfile2.commit()
 

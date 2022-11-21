@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1699</width>
+    <height>977</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QGridLayout" name="main_grid">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMaximumSize</enum>
+      </property>
+      <item row="0" column="1">
+       <widget class="QFrame" name="right_menu">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QTableView" name="table">
+           <property name="minimumSize">
+            <size>
+             <width>256</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::CustomContextMenu</enum>
+           </property>
+           <property name="sizeAdjustPolicy">
+            <enum>QAbstractScrollArea::AdjustToContents</enum>
+           </property>
+           <property name="dragEnabled">
+            <bool>true</bool>
+           </property>
+           <property name="gridStyle">
+            <enum>Qt::DashDotLine</enum>
+           </property>
+           <property name="sortingEnabled">
+            <bool>true</bool>
+           </property>
+           <attribute name="horizontalHeaderStretchLastSection">
+            <bool>true</bool>
+           </attribute>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton">
+           <property name="text">
+            <string>PushButton</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_4">
+           <property name="text">
+            <string>PushButton</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="0" alignment="Qt::AlignTop">
+       <widget class="QFrame" name="left_menu">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="pushButton_2">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+             <underline>false</underline>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">padding:10px</string>
+           </property>
+           <property name="text">
+            <string>PushButton</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_3">
+           <property name="text">
+            <string>PushButton</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="load_package_button">
+           <property name="text">
+            <string>PushButton</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1699</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="actionLoad_Translation"/>
+    <addaction name="actionExport_to_CSV"/>
+    <addaction name="actionExport_to_Package"/>
+   </widget>
+   <addaction name="menuFile"/>
+  </widget>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Load Package</string>
+   </property>
+  </action>
+  <action name="actionLoad_Translation">
+   <property name="text">
+    <string>Load Translation</string>
+   </property>
+  </action>
+  <action name="actionExport_to_CSV">
+   <property name="text">
+    <string>Export to CSV</string>
+   </property>
+  </action>
+  <action name="actionExport_to_Package">
+   <property name="text">
+    <string>Export to Package</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>table</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>904</x>
+     <y>459</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>849</x>
+     <y>488</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

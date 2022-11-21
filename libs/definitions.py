@@ -36,3 +36,9 @@ LANG_LIST = [
     "SPA_ES",
     "SWE_SE"
 ]
+
+STATE_LIST = {
+    0: 'Not translated',
+    1: 'To be checked',
+    2: 'Validated'
+}
