@@ -2,23 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3364c699-efa5-4e1b-86c4-ba989a117231" name="Changes" comment="I^date">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/stbl.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/stbl.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/tables.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/tables.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main2.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main_qt.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_qt.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.package" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.ui" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test2.package" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_FRA_FR.package" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_new.package" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/testnh" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -149,7 +134,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668567956958</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="I^date">
+      <created>1669068299690</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1669068299690</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

@@ -32,6 +32,7 @@ class App(QMainWindow):
         self.filepath = None
         self.params = None
         self.proxy_model = None
+        self.buttons = {}
 
         self.initUI()
 
@@ -66,15 +67,18 @@ class App(QMainWindow):
         button.setStyleSheet("padding:10px")
         self.left_container.addWidget(button)
 
-    def createMenuElement(self, icon, text, shortcut, desc, action, menu):
-        loadAct = QAction(QIcon(icon), text, self)
+    def createMenuElement(self, name, icon, text, shortcut, desc, action, menu, checkable=False):
+        self.buttons[name] = QAction(QIcon(icon), text, self)
 
         if shortcut:
-            loadAct.setShortcut(shortcut)
+            self.buttons[name].setShortcut(shortcut)
 
-        loadAct.setStatusTip(desc)
-        loadAct.triggered.connect(lambda: action)
-        menu.addAction(loadAct)
+        if checkable:
+            self.buttons[name].setCheckable(True)
+
+        self.buttons[name].setStatusTip(desc)
+        self.buttons[name].triggered.connect(action)
+        menu.addAction(self.buttons[name])
 
     def export_package(self):
         try:
@@ -170,20 +174,23 @@ class App(QMainWindow):
         self.fileMenu = menubar.addMenu('&File')
         self.settingsMenu = menubar.addMenu('&Settings')
 
-        self.createMenuElement('exit.png', '&Load Package', 'Ctrl+O', 'Load a package file', self.load_package,
+        self.createMenuElement('loadpackage', 'exit.png', '&Load Package', 'Ctrl+O', 'Load a package file',
+                               self.load_package,
                                self.fileMenu)
 
-        self.createMenuElement('exit.png', '&Save Translation', 'Ctrl+S', 'Save Translation', self.save_translation,
+        self.createMenuElement('savetranslation', 'exit.png', '&Save Translation', 'Ctrl+S', 'Save Translation',
+                               self.save_translation,
                                self.fileMenu)
 
-        self.createMenuElement('exit.png', '&Load Translation', 'Ctrl+S', 'Load Translation', self.load_translation,
+        self.createMenuElement('loadtranslation', 'exit.png', '&Load Translation', 'Ctrl+S', 'Load Translation',
+                               self.load_translation,
                                self.fileMenu)
 
-        self.createMenuElement('exit.png', '&Load Package', 'Ctrl+Q', 'Load a package file',
+        self.createMenuElement('loadpackage', 'exit.png', '&Load Package', 'Ctrl+Q', 'Load a package file',
                                QApplication.instance().quit,
                                self.fileMenu)
 
-        self.createMenuElement('exit.png', '&Settings', 'Ctrl+Q', 'Settings',
+        self.createMenuElement('settings', 'exit.png', '&Settings', 'Ctrl+Q', 'Settings',
                                self.update_settings,
                                self.settingsMenu)
 
@@ -251,14 +258,35 @@ class App(QMainWindow):
         toolbar = QToolBar("My main toolbar")
         self.addToolBar(toolbar)
 
-        self.createMenuElement(None, 'Filter Validated', '', 'Filter Validated Strings', self.filterState(2), toolbar)
-        self.createMenuElement(None, 'Filter UnValidated', '', 'Filter Unvalidated Strings', self.filterState(0),
-                               toolbar)
-        self.createMenuElement(None, 'Filter Unknown', '', 'Filter Unknown Strings', self.filterState(1), toolbar)
+        self.createMenuElement('fvalidated', None, 'Filter Validated', '', 'Filter Validated Strings',
+                               self.filterValidate, toolbar,
+                               True)
+        self.createMenuElement('funvalidated', None, 'Filter UnValidated', '', 'Filter Unvalidated Strings',
+                               self.filterUnvalidated,
+                               toolbar, True)
+        self.createMenuElement('funknown', None, 'Filter Unknown', '', 'Filter Unknown Strings', self.filterUnknown,
+                               toolbar, True)
 
-    def filterState(self, state):
-        if state:
-            self.proxy_model.setFilterFixedString(STATE_LIST[state])
+    def filterValidate(self, action):
+        if not self.buttons['fvalidated'].isChecked():
+            self.proxy_model.setFilterFixedString('')
+
+        else:
+            self.proxy_model.setFilterFixedString(STATE_LIST[2])
+
+    def filterUnknown(self, action):
+        if not self.buttons['funknown'].isChecked():
+            self.proxy_model.setFilterFixedString('')
+
+        else:
+            self.proxy_model.setFilterFixedString(STATE_LIST[1])
+
+    def filterUnvalidated(self, action):
+        if not self.buttons['funvalidated'].isChecked():
+            self.proxy_model.setFilterFixedString('')
+
+        else:
+            self.proxy_model.setFilterFixedString(STATE_LIST[0])
 
     def load_ui(self):
         self.table = QtWidgets.QTableView(self.right_frame)
