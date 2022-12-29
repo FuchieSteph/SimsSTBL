@@ -3,6 +3,7 @@ from PyQt6 import QtGui, QtWidgets, QtCore
 from PyQt6.QtGui import QAction, QColor, QIcon, QFont
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
+from translatepy.translators.google import GoogleTranslateV2
 
 from libs.definitions import STATE_LIST
 
@@ -30,8 +31,13 @@ class TableModel(QtCore.QAbstractTableModel):
         if role == Qt.ItemDataRole.DisplayRole:
             if index.column() == 3:
                 return STATE_LIST[self._data[index.row()][index.column()]]
+            if index.column() == 0:
+                return self._data[index.row()][index.column()]
             else:
                 return self._data[index.row()][index.column()]
+
+        if role == Qt.ItemDataRole.EditRole:
+            return self._data[index.row()][index.column()]
 
     def rowCount(self, index):
         return len(self._data)
@@ -52,9 +58,11 @@ class TableModel(QtCore.QAbstractTableModel):
         return False
 
     def replaceData(self, string, data):
+
         if string in self._keys:
             row = self._keys.index(string)
-            if self._data[row][1] == data['base']:
+
+            if self._data[row][1] == data['base'] or data['base'] is None:
                 self._data[row][2] = data['translation']
                 self._data[row][3] = data['state']
 
