@@ -2,8 +2,64 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3364c699-efa5-4e1b-86c4-ba989a117231" name="Changes" comment="I^date">
+      <change afterPath="$PROJECT_DIR$/database/!Lumpinou - MemoryPanel v1_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/Carl_Gameplay_Overhaul_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/GoldSim_Doll_Playroom_Set_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/GoldSim_Doll_Playroom_Set_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/KS - Hotel Resort Lot Trait [Bonus] - FR par Candyman_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/KS - Hotel Resort Lot Trait [Bonus]_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/KS - Hotel Resort Lot Trait [Bonus]_FRA_FR_2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/KS - My Resort [Event Base] - FR par Candyman_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/KS - My Resort [Event Base]_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/KS - My Resort [Hidden Traits] - FR par Candyman_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/KS - My Resort [Hidden Traits]_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/KS - My Resort [Staff &amp; Resort Payments] - FR par Candyman_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/KS - My Resort [Staff &amp; Resort Payments] - FR par Candyman_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/KS - My Resort [Staff &amp; Resort Payments]_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/SimRealist_-_PrivatePractice-Careers_2_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/SimRealist_-_PrivatePractice_2_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/SimRealist_-_PrivatePractice_2_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Functional Beer Barrels_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Functional Beer_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Functional Champagne GoldenEdition_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Functional Cognac_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Functional Martini_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Functional Vodka_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Functional Whiskey_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Gift Box FerreroRocher_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] RealisticCookingMod NEW MENU_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] RealisticCookingMod_MAIN_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Appetizers_Beer Plate Ingr_Custom_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Appetizers_Beer Plate Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Appetizers_Canapes_withSalmon Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Appetizers_Crispbread_withVeg Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Appetizers_Meat and Cheese Platter Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Appetizers_Tartlets_withCaviar Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Appetizers_Tartlets_withFruit_set1 Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Appetizers_Tartlets_withFruit_set2 Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Bake_Pretzels Ingr_Custom_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Bake_Pretzels Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Cake_CreamyChoco_withBerry Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Cookie_Gingerbread Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Dessert_Turron Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_PancakesStuffed_withMeat Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_PancakesStuffed_withSalmon Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Pancakes_Crepes_WithBerries Ingr_Custom_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Pancakes_Crepes_WithBerries Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Rolls_Set_Trio_Classic Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Salads_Greek Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Sandwiches_withVegetables_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Soups_Borsch Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Soups_Cheese_withCroutons Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Soups_Creamy_withSalmon Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] Recipe_Soups_Spinach_withCroutons Ingr_Custom_auto_FRA_FR.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/[SS] VendingMachine PowerAndSnack_auto_FRA_FR.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/SimsSTBL.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SimsSTBL.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_qt.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_qt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/test.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/test_EN.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/test_FRA_FR.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,16 +83,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "D:/Code/Github/SimsInterface/SimsSTBL",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyIntegratedToolsModulesConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Code/Github/SimsMod&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;copyright&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Code\Github\SimsInterface\SimsSTBL" />
@@ -46,7 +102,7 @@
       <recent name="D:\Code\Github\SimsInterface\SimsSTBL\libs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main_qt">
+  <component name="RunManager" selected="Python.main">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="SimsSTBL" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -89,7 +145,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="main_qt" type="PythonConfigurationType" factoryName="Python" singleton="false" temporary="true" nameIsGenerated="true">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" singleton="false" temporary="true" nameIsGenerated="true">
       <module name="SimsSTBL" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -101,7 +157,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main_qt.py" />
+      <option name="SCRIPT_NAME" value="D:\Code\Github\SimsInterface\SimsSTBL\main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -112,7 +168,6 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main_qt" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.main2" />
       </list>
@@ -141,8 +196,25 @@
       <option name="project" value="LOCAL" />
       <updated>1669068299690</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="I^date">
+      <created>1669069444206</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1669069444206</updated>
+    </task>
+    <task id="LOCAL-00004" summary="I^date">
+      <created>1672279186565</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1672279186565</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="requirements.txt" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

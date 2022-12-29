@@ -1,2 +1,62 @@
 /tests/
 /database/
+*.json
+database/SimRealist_-_PrivatePractice_2_FRA_FR.json
+database/SimRealist_-_PrivatePractice_2_auto_FRA_FR.json
+database/SimRealist_-_PrivatePractice-Careers_2_auto_FRA_FR.json
+database/KS - My Resort \[Staff & Resort Payments\]_FRA_FR.json
+database/KS - My Resort \[Staff & Resort Payments\] - FR par Candyman_FRA_FR.json
+database/KS - My Resort \[Staff & Resort Payments\] - FR par Candyman_auto_FRA_FR.json
+database/KS - My Resort \[Hidden Traits\]_FRA_FR.json
+database/KS - My Resort \[Hidden Traits\] - FR par Candyman_auto_FRA_FR.json
+database/KS - My Resort \[Event Base\]_FRA_FR.json
+database/KS - My Resort \[Event Base\] - FR par Candyman_auto_FRA_FR.json
+database/KS - Hotel Resort Lot Trait \[Bonus\]_FRA_FR_2.json
+database/KS - Hotel Resort Lot Trait \[Bonus\]_FRA_FR.json
+database/KS - Hotel Resort Lot Trait \[Bonus\] - FR par Candyman_auto_FRA_FR.json
+database/GoldSim_Doll_Playroom_Set_FRA_FR.json
+database/GoldSim_Doll_Playroom_Set_auto_FRA_FR.json
+database/Carl_Gameplay_Overhaul_auto_FRA_FR.json
+database/\[SS\] VendingMachine PowerAndSnack_auto_FRA_FR.json
+database/\[SS\] Recipe_Soups_Spinach_withCroutons Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_Soups_Creamy_withSalmon Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_Soups_Cheese_withCroutons Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_Soups_Borsch Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_Sandwiches_withVegetables_auto_FRA_FR.json
+database/\[SS\] Recipe_Salads_Greek Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_Rolls_Set_Trio_Classic Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_PancakesStuffed_withSalmon Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_PancakesStuffed_withMeat Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_Pancakes_Crepes_WithBerries Ingr_Custom_FRA_FR.json
+database/\[SS\] Recipe_Pancakes_Crepes_WithBerries Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_Dessert_Turron Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_Cookie_Gingerbread Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_Cake_CreamyChoco_withBerry Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_Bake_Pretzels Ingr_Custom_FRA_FR.json
+database/\[SS\] Recipe_Bake_Pretzels Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_Appetizers_Tartlets_withFruit_set2 Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_Appetizers_Tartlets_withFruit_set1 Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_Appetizers_Tartlets_withCaviar Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_Appetizers_Meat and Cheese Platter Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_Appetizers_Crispbread_withVeg Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_Appetizers_Canapes_withSalmon Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] Recipe_Appetizers_Beer Plate Ingr_Custom_FRA_FR.json
+database/\[SS\] Recipe_Appetizers_Beer Plate Ingr_Custom_auto_FRA_FR.json
+database/\[SS\] RealisticCookingMod_MAIN_auto_FRA_FR.json
+database/\[SS\] RealisticCookingMod NEW MENU_auto_FRA_FR.json
+database/\[SS\] Gift Box FerreroRocher_auto_FRA_FR.json
+database/\[SS\] Functional Whiskey_auto_FRA_FR.json
+database/\[SS\] Functional Vodka_auto_FRA_FR.json
+database/\[SS\] Functional Martini_auto_FRA_FR.json
+database/\[SS\] Functional Cognac_auto_FRA_FR.json
+database/\[SS\] Functional Champagne GoldenEdition_auto_FRA_FR.json
+database/\[SS\] Functional Beer_auto_FRA_FR.json
+database/\[SS\] Functional Beer Barrels_auto_FRA_FR.json
+database/\!Lumpinou - MemoryPanel v1_auto_FRA_FR.json
+*.pyc
+*.pyc
+*.pyc
+.idea/SimsSTBL.iml
+.idea/workspace.xml
+*.iml
+*.xml
