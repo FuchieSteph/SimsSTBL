@@ -1,6 +1,5 @@
 import os
 import sys
-import time
 import traceback
 
 from PyQt6.QtCore import QObject, QRunnable, pyqtSignal, pyqtSlot
@@ -9,8 +8,10 @@ from s4py.package import *
 from translatepy.translators import GoogleTranslateV2
 
 import csv
-from libs.definitions import LANG_LIST
-from libs.package import Package
+
+from classes.settings import SettingsWindow
+from helpers.definitions import LANG_LIST
+from classes.package import Package
 
 
 class WorkerSignals(QObject):
@@ -124,15 +125,13 @@ class App_Actions:
         self.write_logs('Translation exported: ' + export_path[0])
 
     def import_csv(self):
-        import_path = QFileDialog.getSaveFileName(self, 'Open file', '', "CSV (*.csv)")
+        import_path = QFileDialog.getOpenFileName(self, 'Open file', '', "CSV (*.csv)")
 
         if import_path[0] == '':
             return
 
-        with import_path[0] as csvfile:
-            spamreader = csv.reader(csvfile, delimiter=';', quotechar='|')
-            for row in spamreader:
-                print(', '.join(row))
+        with open(import_path[0], 'r') as f:
+            self.package.load_csv_translation(csv.reader(f, delimiter=';'))
 
     def load_package(self):
         path = \
@@ -201,10 +200,23 @@ class App_Actions:
     def thread_complete(self):
         self.write_logs('Package translation complete')
 
+    def load_from_package(self):
+        path = \
+            QFileDialog.getOpenFileName(self, 'Open the package to use', self.sourcepath,
+                                        "Packages files (*.package)")[0]
+
+        if path == '':
+            return
+
+        package = Package(path, self.package.lang, True)
+        if package.isLoaded:
+            self.package.load_package_translation(package)
+            self.write_logs('Translation loaded')
+
     def translate(self, progress_callback, file, lang, path):
         package = Package(os.path.join(path, file), lang, True)
 
-        if (package.isLoaded):
+        if package.isLoaded:
             self.sourcepath = package.filepath
             self.load_table(package)
 

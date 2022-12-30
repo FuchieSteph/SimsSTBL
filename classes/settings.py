@@ -1,16 +1,9 @@
-import json
-import sys
-import os
-import PyQt6
 from PyQt6 import QtGui, QtWidgets, QtCore
-from PyQt6.QtCore import QDir, QFile, QFileInfo, QSortFilterProxyModel
-from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtWidgets import *
-from PyQt6.QtGui import *
 from PyQt6.QtCore import QSettings
 
 
-class TranslationsWindow(QWidget):
+class SettingsWindow(QWidget):
     """
     This "window" is a QWidget. If it has no parent, it
     will appear as a free-floating window as we want.
@@ -97,16 +90,3 @@ class TranslationsWindow(QWidget):
             self.lineEdit2.setText(self.sourcePath)
 
         self.settings.setValue("SourcePath", self.sourcePath)
-
-    def translate(self):
-        path = \
-            QFileDialog.getExistingDirectory(self, 'Select the folder to translate', self.filepath)
-
-        if path == '':
-            return
-
-        App.lang = QInputDialog.getItem(self, "Language Selection", "Select the lang", LANG_LIST, 5, False)[0]
-
-        for file in os.listdir(path):
-            if file.endswith(".package"):
-                App.translate_folder(os.path.join(path, file))

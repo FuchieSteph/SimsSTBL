@@ -1,11 +1,9 @@
 import PyQt6
-from PyQt6 import QtGui, QtWidgets, QtCore
-from PyQt6.QtGui import QAction, QColor, QIcon, QFont
-from PyQt6.QtWidgets import *
+from PyQt6 import QtCore
+from PyQt6.QtGui import QColor
 from PyQt6.QtCore import *
-from translatepy.translators.google import GoogleTranslateV2
 
-from libs.definitions import STATE_LIST
+from helpers.definitions import STATE_LIST
 
 
 class TableModel(QtCore.QAbstractTableModel):
@@ -22,34 +20,29 @@ class TableModel(QtCore.QAbstractTableModel):
         return None
 
     def data(self, index, role):
+        row = self._data[index.row()]
+        cell = row[index.column()]
+
         if role == Qt.ItemDataRole.BackgroundRole:
-            if self._data[index.row()][3] == 2:
-                return QVariant(QColor(Qt.GlobalColor.green))
-            elif self._data[index.row()][3] == 1:
-                return QVariant(QColor(Qt.GlobalColor.lightGray))
+            if row[3] == 2:
+                return QVariant(QColor.fromRgb(44, 165, 141))
+            elif row[3] == 1:
+                return QVariant(QColor.fromRgb(244, 97, 151))
 
         if role == Qt.ItemDataRole.DisplayRole:
             if index.column() == 3:
-                return STATE_LIST[self._data[index.row()][index.column()]]
-            if index.column() == 0:
-                return self._data[index.row()][index.column()]
-            else:
-                return self._data[index.row()][index.column()]
+                return STATE_LIST[cell]
+
+            return cell
 
         if role == Qt.ItemDataRole.EditRole:
-            return self._data[index.row()][index.column()]
+            return cell
 
     def rowCount(self, index):
         return len(self._data)
 
     def columnCount(self, index):
         return len(self._data[0])
-
-    def openAction(self, row, column):
-        print('test')
-
-    def deleteSelected(self):
-        print('test')
 
     def setData(self, index, value, role):
         if role == Qt.ItemDataRole.EditRole and index.column() == 2 and value != '':
@@ -61,7 +54,6 @@ class TableModel(QtCore.QAbstractTableModel):
 
         if string in self._keys:
             row = self._keys.index(string)
-
             if self._data[row][1] == data['base'] or data['base'] is None:
                 self._data[row][2] = data['translation']
                 self._data[row][3] = data['state']

@@ -1,0 +1,24 @@
+.menu {{
+    border: 0px;
+    background-color: {QTMATERIAL_PRIMARYCOLOR};
+    vertical-align:top;
+}}
+
+.container {{
+    border: 0px;
+    vertical-align:top;
+    background-color:#ecedf1;
+}}
+
+QHeaderView::section {{
+    color:white;
+    background-color:{QTMATERIAL_PRIMARYCOLOR}
+}}
+
+QTableView::items {{
+    border-bottom: 1px solid #d6d9dc;
+}}
+
+QMenuBar {{
+  background-color: white;
+}}

@@ -1,24 +1,11 @@
 import json
-import sys
-import os
-import time
 import ntpath
-
-import PyQt6
-from PyQt6 import QtGui, QtWidgets, QtCore
-from PyQt6.QtCore import QDir, QFile, QFileInfo, QSortFilterProxyModel, QThread, QTimer, Qt, pyqtSignal
-from PyQt6.QtGui import QAction, QIcon
-from PyQt6.QtWidgets import *
-from PyQt6.QtGui import *
-from PyQt6.QtCore import QSettings
-
 from s4py.package import *
 
-import csv
-from libs.definitions import LANGS, LANG_LIST, STATE_LIST
-from libs import helpers
-from libs.stbl import StblReader
-from libs.tables import TableModel, get_translation, map_to_json
+from helpers.definitions import LANGS
+from helpers import helpers
+from classes.stbl import StblReader
+from classes.tables import get_translation, map_to_json
 
 
 class Package:
@@ -77,6 +64,22 @@ class Package:
                 return True
             except:
                 return False
+
+    def load_csv_translation(self, rows):
+        next(rows)
+
+        for data in rows:
+            structure = {'id': int(data[0]), 'base': None, 'translation': data[2], 'state': 2}
+            self.model.replaceData(int(data[0]), structure)
+
+        return True
+
+    def load_package_translation(self, package):
+        for data in package.DATA['data']:
+            structure = {'id': data[0], 'base': None, 'translation': data[2], 'state': 2}
+            self.model.replaceData(data[0], structure)
+
+        return True
 
     def save_translation(self, export_path):
         with open(export_path, 'w', newline='', encoding='utf-8') as f:

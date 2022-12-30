@@ -1,6 +1,7 @@
 /tests/
 /database/
 *.json
+*.pyc
 database/SimRealist_-_PrivatePractice_2_FRA_FR.json
 database/SimRealist_-_PrivatePractice_2_auto_FRA_FR.json
 database/SimRealist_-_PrivatePractice-Careers_2_auto_FRA_FR.json
@@ -59,4 +60,11 @@ database/\!Lumpinou - MemoryPanel v1_auto_FRA_FR.json
 .idea/SimsSTBL.iml
 .idea/workspace.xml
 *.iml
+*.xml
+*.pyc
+libs/__pycache__/tables.cpython-310.pyc
+libs/__pycache__/stbl.cpython-310.pyc
+libs/__pycache__/helpers.cpython-310.pyc
+libs/__pycache__/definitions.cpython-310.pyc
+.idea/workspace.xml
 *.xml
