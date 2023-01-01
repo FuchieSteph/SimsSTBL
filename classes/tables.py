@@ -1,42 +1,17 @@
 import PyQt6
-from PyQt6 import QtCore
+from PyQt6 import QtCore, QtWidgets
 from PyQt6.QtGui import QColor
 from PyQt6.QtCore import *
+from PyQt6.QtWidgets import QTableWidget
 
-from helpers.definitions import STATE_LIST
+from helpers.definitions import *
 
 
 class TableModel(QtCore.QAbstractTableModel):
     def __init__(self, data, header):
         super(TableModel, self).__init__()
-        self._data = data['data']
-        self._keys = data['keys']
-        self._strings = data['base']
+        self._data = data
         self._header = header
-
-    def headerData(self, col, orientation, role):
-        if orientation == PyQt6.QtCore.Qt.Orientation.Horizontal and role == Qt.ItemDataRole.DisplayRole:
-            return self._header[col]
-        return None
-
-    def data(self, index, role):
-        row = self._data[index.row()]
-        cell = row[index.column()]
-
-        if role == Qt.ItemDataRole.BackgroundRole:
-            if row[3] == 2:
-                return QVariant(QColor.fromRgb(44, 165, 141))
-            elif row[3] == 1:
-                return QVariant(QColor.fromRgb(244, 97, 151))
-
-        if role == Qt.ItemDataRole.DisplayRole:
-            if index.column() == 3:
-                return STATE_LIST[cell]
-
-            return cell
-
-        if role == Qt.ItemDataRole.EditRole:
-            return cell
 
     def rowCount(self, index):
         return len(self._data)
@@ -44,41 +19,102 @@ class TableModel(QtCore.QAbstractTableModel):
     def columnCount(self, index):
         return len(self._data[0])
 
+    def headerData(self, col, orientation, role):
+        if orientation == PyQt6.QtCore.Qt.Orientation.Horizontal and role == Qt.ItemDataRole.DisplayRole:
+            return self._header[col]
+        return None
+
+    def search_position(self, data):
+        def filter_data(v):
+            if v[KEY_INDEX] == data['id'] and (v[BASE_INDEX] == data['base'] or data['base'] is None):
+                return True
+            elif v[BASE_INDEX] == data['base']:
+                return True
+            else:
+                return False
+
+        result = list(filter(filter_data, self._data))
+
+        return map(lambda x: self._data.index(x), result) if len(result) > 0 else None
+
+    def search(self, string):
+        result = list(filter(lambda x: string in x[TRANSLATION_INDEX], self._data))
+        return map(lambda x: self._data.index(x), result) if len(result) > 0 else None
+
+    def data(self, index, role):
+        row = self._data[index.row()]
+        cell = row[index.column()]
+
+        if role == Qt.ItemDataRole.BackgroundRole:
+            if row[STATE_INDEX] == VALIDATED_STATE:
+                return QVariant(QColor.fromRgb(44, 165, 141))
+            elif row[STATE_INDEX] == TO_VALIDATE_STATE:
+                return QVariant(QColor.fromRgb(244, 97, 151))
+            elif row[STATE_INDEX] == AUTO_STATE:
+                return QVariant(QColor.fromRgb(237, 221, 212))
+
+        if role == Qt.ItemDataRole.DisplayRole:
+            if index.column() == STATE_INDEX:
+                return STATE_LIST[cell]
+
+            return cell
+
+        if role == Qt.ItemDataRole.EditRole:
+            return cell
+
     def setData(self, index, value, role):
-        if role == Qt.ItemDataRole.EditRole and index.column() == 2 and value != '':
-            self._data[index.row()][index.column()] = value
+        base = self._data[index.row()][BASE_INDEX]
+
+        if role == Qt.ItemDataRole.EditRole and index.column() == TRANSLATION_INDEX and value != '':
+            indexes = self.search_position({'id': None, 'base': base})
+
+            if indexes is not None:
+                for key in indexes:
+                    if key != index.row() and self._data[key][STATE_INDEX] == VALIDATED_STATE:
+                        continue
+
+                    self._data[key][index.column()] = value
+
+                    if key == index.row():
+                        self._data[key][STATE_INDEX] = TO_VALIDATE_STATE
+                    else:
+                        self._data[key][STATE_INDEX] = AUTO_STATE
+
             return True
         return False
 
+    def search_replace(self, search, replace):
+        matches = self.search(search)
+        if matches is not None:
+            for index in matches:
+                self._data[index][TRANSLATION_INDEX] = self._data[index][TRANSLATION_INDEX].replace(search, replace)
+                self._data[index][STATE_INDEX] = TO_VALIDATE_STATE
+
+        return len(matches) if matches is not None else 0
+
     def replaceData(self, string, data):
 
-        if string in self._keys:
-            row = self._keys.index(string)
-            if self._data[row][1] == data['base'] or data['base'] is None:
-                self._data[row][2] = data['translation']
-                self._data[row][3] = data['state']
+        indexes = self.search_position(data)
 
-        elif data['base'] in self._strings:
-            row = self._strings.index(data['base'])
-            self._data[row][2] = data['translation']
-            self._data[row][3] = data['state']
-
-        else:
-            pass
+        if indexes is not None:
+            for index in indexes:
+                self._data[index][TRANSLATION_INDEX] = data['translation']
+                self._data[index][STATE_INDEX] = data['state']
 
     def updateState(self, row, state):
-        self._data[row][3] = state
+        self._data[row][STATE_INDEX] = state
 
     def flags(self, index):
         return Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsEditable
 
 
 def get_translation(n):
-    return n[2]
+    return n[TRANSLATION_INDEX]
 
 
 def map_to_json(n):
-    return {"id": n[0], 'base': n[1], 'translation': n[2], 'state': n[3]}
+    return {"id": n[KEY_INDEX], 'instance': n[INSTANCE_INDEX], 'base': n[BASE_INDEX],
+            'translation': n[TRANSLATION_INDEX], 'state': n[STATE_INDEX]}
 
 
 class MyProxyModel(QSortFilterProxyModel):
@@ -88,3 +124,26 @@ class MyProxyModel(QSortFilterProxyModel):
 
     def filterState(self, state):
         return
+
+
+class CustomQTableView(QtWidgets.QTableView):
+    signal = QtCore.pyqtSignal()
+    signal_up = QtCore.pyqtSignal()
+    signal_down = QtCore.pyqtSignal()
+    signal_key = QtCore.pyqtSignal()
+
+    def __init__(self, *args, **kwargs):
+        QtWidgets.QTableView.__init__(self, *args, **kwargs)
+        self.ScrollHint(QtWidgets.QAbstractItemView.ScrollHint.EnsureVisible)
+
+    def keyPressEvent(self, event):
+        if event.key() == QtCore.Qt.Key.Key_Return:
+            self.signal.emit()
+        elif event.key() == QtCore.Qt.Key.Key_Up:
+            print('up')
+            self.signal_up.emit()
+        elif event.key() == QtCore.Qt.Key.Key_Down:
+            print('down')
+            self.signal_down.emit()
+        else:
+            self.signal_key.emit()

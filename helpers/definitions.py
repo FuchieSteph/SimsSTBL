@@ -40,5 +40,18 @@ LANG_LIST = [
 STATE_LIST = {
     0: 'Not translated',
     1: 'To be checked',
-    2: 'Validated'
+    2: 'Validated',
+    3: 'Automatically translated'
 }
+
+FKEY_INDEX = 0
+KEY_INDEX = 1
+INSTANCE_INDEX = 2
+BASE_INDEX = 3
+TRANSLATION_INDEX = 4
+STATE_INDEX = 5
+
+AUTO_STATE = 3
+VALIDATED_STATE = 2
+TO_VALIDATE_STATE = 1
+NO_STATE = 0

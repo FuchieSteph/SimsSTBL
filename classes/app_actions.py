@@ -9,8 +9,9 @@ from translatepy.translators import GoogleTranslateV2
 
 import csv
 
+from classes.search_replace import SearchReplaceWindow
 from classes.settings import SettingsWindow
-from helpers.definitions import LANG_LIST
+from helpers.definitions import *
 from classes.package import Package
 
 
@@ -107,9 +108,13 @@ class App_Actions:
 
             self.write_logs('Translation package exported : ' + export_path)
 
-        self.package.export(export_path)
+        self.package.export(False, export_path)
 
-    def export_translation(self):
+    def export_replace_package(self):
+        self.write_logs('Translation package saved')
+        self.package.export(True, None)
+
+    def export_csv(self):
         name = self.package.getFilename()
         export_path = QFileDialog.getSaveFileName(self, 'Export translation to CSV', name + '.csv', "CSV (*.csv)")
 
@@ -117,8 +122,8 @@ class App_Actions:
             return
 
         with open(export_path[0], 'w', newline='', encoding='UTF-8') as f:
-            writer = csv.writer(f)
-            writer.writerow(['KEY', 'EN', 'FR'])
+            writer = csv.writer(f, delimiter=";")
+            writer.writerow(['KEY', 'INSTANCE', 'EN', 'FR', 'STATE'])
             writer.writerows(self.package.model._data)
             f.close()
 
@@ -130,7 +135,7 @@ class App_Actions:
         if import_path[0] == '':
             return
 
-        with open(import_path[0], 'r') as f:
+        with open(import_path[0], 'r', newline='', encoding='utf-8') as f:
             self.package.load_csv_translation(csv.reader(f, delimiter=';'))
 
     def load_package(self):
@@ -173,10 +178,10 @@ class App_Actions:
         else:
             self.write_logs('Translation loaded: ' + path)
 
-    def save_translation(self):
+    def save_translation(self, ask=False):
         name = self.package.getFilename()
 
-        if not self.package.isQuick:
+        if (not self.package.isQuick and self.package.database_path is None) or ask == True:
             export_path = QFileDialog.getSaveFileName(self, 'Save a translation', self.settings.value(
                 "DatabasePath") + '/' + name + '_' + self.package.lang + '.json',
                                                       "JSON (*.json)")[0]
@@ -184,12 +189,22 @@ class App_Actions:
             if export_path == '':
                 return
 
+            self.package.database_path = export_path
+
             self.write_logs('Translation saved: ' + export_path)
 
+        elif self.package.isQuick:
+            export_path = self.settings.value(
+                "DatabasePath") + '/' + name + '_auto_' + self.package.lang + '.json'
+
         else:
-            export_path = self.settings.value("DatabasePath") + '/' + name + '_auto_' + self.package.lang + '.json'
+            export_path = self.package.database_path
 
         self.package.save_translation(export_path)
+        self.write_logs('Translation Saved')
+
+    def save_translation_as(self):
+        self.save_translation(True)
 
     def progress_fn(self, n):
         self.write_logs("%s done" % n)
@@ -214,11 +229,16 @@ class App_Actions:
             self.write_logs('Translation loaded')
 
     def translate(self, progress_callback, file, lang, path):
-        package = Package(os.path.join(path, file), lang, True)
+        if path is not None:
+            package = Package(os.path.join(path, file), lang, True)
+        else:
+            package = self.package
 
         if package.isLoaded:
             self.sourcepath = package.filepath
-            self.load_table(package)
+
+            if path is not None:
+                self.load_table(package)
 
             translator = GoogleTranslateV2()
             n = 1
@@ -226,18 +246,20 @@ class App_Actions:
             for data in package.model._data:
 
                 try:
-                    results = translator.translate(data[1], 'fr')
-                    data[2] = results.result
+                    if data[STATE_INDEX] == NO_STATE:
+                        results = translator.translate(data[BASE_INDEX], 'fr')
+                        data[TRANSLATION_INDEX] = results.result
+                        data[STATE_INDEX] = TO_VALIDATE_STATE
                 except:
                     pass
 
                 progress_callback.emit(file + ' ' + str(n) + "/" + str(len(package.model._data)))
                 n = n + 1
 
-            package.save_translation(
-                self.settings.value("DatabasePath") + '/' + package.getFilename() + '_auto_' + package.lang + '.json')
-            package.export(package.filepath.replace('.package', '_' + package.lang + '.package'))
-
+            if path is not None:
+                package.save_translation(self.settings.value(
+                    "DatabasePath") + '/' + package.getFilename() + '_auto_' + package.lang + '.json')
+                package.export(False, package.filepath.replace('.package', '_' + package.lang + '.package'))
         else:
             return 'No strings found, file skipped: ' + file
 
@@ -274,3 +296,24 @@ class App_Actions:
             self.params = SettingsWindow()
         self.params.show()
         self.sourcepath = self.settings.value("SourcePath")
+
+    def search_replace(self):
+        if self.search is None:
+            self.search = SearchReplaceWindow()
+
+        self.search.submitClicked.connect(self.process_search)
+        self.search.show()
+
+    def process_search(self, search, replace):
+        nb = self.package.model.search_replace(search, replace)
+        self.write_logs(str(nb) + ' rows updated')
+
+    def translate_google(self):
+        # Pass the function to execute
+        worker = Worker(self.translate, self.package.getFilename(), self.package.lang, None)
+        worker.signals.result.connect(self.print_output)
+        worker.signals.finished.connect(self.thread_complete)
+        worker.signals.progress.connect(self.progress_fn)
+
+        # Execute
+        self.threadpool.start(worker)

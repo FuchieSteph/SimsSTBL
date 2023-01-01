@@ -15,12 +15,10 @@ class SettingsWindow(QWidget):
         self.initUi()
 
     def initUi(self):
-        layout = QVBoxLayout()
         self.resize(602, 100)
 
         ##VERTICAL LAYOUT
         self.verticalLayout = QtWidgets.QVBoxLayout(self)
-        self.verticalLayout.setObjectName("verticalLayout")
         self.verticalLayout.setContentsMargins(9, 0, -1, 9)
 
         ##LABEL

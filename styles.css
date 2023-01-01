@@ -7,7 +7,6 @@
 .container {{
     border: 0px;
     vertical-align:top;
-    background-color:#ecedf1;
 }}
 
 QHeaderView::section {{
@@ -20,5 +19,13 @@ QTableView::items {{
 }}
 
 QMenuBar {{
-  background-color: white;
+  background-color: #F0F0F0;
+}}
+
+.disabled {{
+    background-color:#F0F0F0;
+}}
+
+QPlainTextEdit, QTableView {{
+    border:2px solid #D3D3D3;
 }}

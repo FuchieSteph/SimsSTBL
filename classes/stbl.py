@@ -1,22 +1,28 @@
 from s4py.package import *
 
+from helpers.definitions import *
+
 
 class StblReader:
-    def __init__(self, content, data, isTrans):
+    def __init__(self, content, data, isTrans, instance):
         self.content = content
+        self.instance = instance
         self.isTrans = isTrans
         self.DATA = data
 
+    def search_position(self, key):
+        result = list(filter(lambda v: v[KEY_INDEX] == key and v[INSTANCE_INDEX][-8:] == self.instance[-8:], self.DATA))
+        return self.DATA.index(result[0]) if len(result) > 0 else None
+
     def loadEmptyStrings(self, choice):
         i = 0
-        char_count = 0
 
         for _ in range(len(self.DATA['keys'])):
             if choice == 0:
-                self.DATA['data'][i][2] = ''
+                self.DATA['data'][i][TRANSLATION_INDEX] = ''
 
             else:
-                self.DATA['data'][i][2] = self.DATA['data'][i][1]
+                self.DATA['data'][i][TRANSLATION_INDEX] = self.DATA['data'][i][1]
 
             i = i + 1
 
@@ -39,35 +45,26 @@ class StblReader:
 
         entries = {}
         size = 0
-
-        i = 0
         char_count = 0
 
         for _ in range(numEntries):
             keyHash = f.get_uint32()
+            index = self.search_position(keyHash)
 
-            try:
-                index = self.DATA['keys'].index(keyHash)
-                row = True
-            except:
-                row = None
-                self.DATA['keys'].append(keyHash)
-
-            flags = f.get_uint8()  # What is in this? It's always 0.
+            flags = f.get_uint8()
             length = f.get_uint16()
             val = f.get_raw_bytes(length).decode('utf-8')
             char_count += len(val)
 
-            if row is None:
-                self.DATA['data'].append([keyHash, None, None, 0])
-                index = len(self.DATA['data']) - 1
+            # FIRST TIME DATA IS LOADED = WE CREATE DATA
+            if index is None:
+                self.DATA.append([str("%08x" % keyHash).upper(), keyHash, self.instance, None, None, 0])
+                index = len(self.DATA) - 1
 
             if self.isTrans:
-                self.DATA['data'][index][2] = val
+                self.DATA[index][TRANSLATION_INDEX] = val
+                self.DATA[index][INSTANCE_INDEX] = self.instance
             else:
-                self.DATA['data'][index][1] = val
-                self.DATA['base'].append(val)
-
-            i = i + 1
+                self.DATA[index][BASE_INDEX] = val
 
         return self.DATA
