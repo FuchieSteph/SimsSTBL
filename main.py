@@ -80,8 +80,11 @@ class App(QMainWindow, App_Actions):
 
     def start_editing(self):
         index = (self.table.selectionModel().currentIndex())
-        self.table.setCurrentIndex(index)
-        self.table.edit(index)
+        current_row = index.row()
+        model_index = index.sibling(current_row, TRANSLATION_INDEX)
+
+        self.table.setCurrentIndex(model_index)
+        self.table.edit(model_index)
 
     def init_settings(self):
         settings = QSettings("SimsStbl", "settings")
@@ -185,26 +188,21 @@ class App(QMainWindow, App_Actions):
 
     def arrowkey(self, num):
         try:
-            self.table_select = self.table.selectionModel()
-            selection = QItemSelection()
-
             index = (self.table.selectionModel().currentIndex())
             value = index.sibling(index.row(), index.column()).data()
             current_row = index.row()
-            current_collumn = index.column()
-
-            model = self.package.model  # get data model for indexes.
+            current_column = index.column()
 
             if (current_row == 0 and num == -1) or (num == 1 and current_row == len(self.package.model._data) - 1):
                 return
 
-            model_index = self.package.model.index(current_row + num, current_collumn)
-
-            mode = QtCore.QItemSelectionModel.SelectionFlag.ClearAndSelect
-            self.table_select.setCurrentIndex(model_index, mode)
-            self.table_select.select(model_index, mode)
+            self.table.clearSelection()
+            self.table.selectRow(current_row + num)
 
             self.print_selection()
+
+            return
+
         except UnboundLocalError:
             pass
 
@@ -302,7 +300,7 @@ class App(QMainWindow, App_Actions):
         self.table.horizontalHeader().setSectionsMovable(True)
         self.table.setColumnHidden(1, True)
 
-        self.table.setSelectionBehavior(PyQt6.QtWidgets.QAbstractItemView.SelectionBehavior.SelectItems)
+        self.table.setSelectionBehavior(PyQt6.QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows)
         self.table.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
         self.table.customContextMenuRequested['QPoint'].connect(self.show_table_menu)
 

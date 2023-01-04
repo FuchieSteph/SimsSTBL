@@ -2,19 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3364c699-efa5-4e1b-86c4-ba989a117231" name="Changes" comment="I^date">
-      <change afterPath="$PROJECT_DIR$/classes/search_replace.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages_tester.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/app_actions.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes/app_actions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/package.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes/package.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/stbl.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes/stbl.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/tables.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes/tables.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpers/definitions.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpers/definitions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpers/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpers/helpers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -214,7 +204,14 @@
       <option name="project" value="LOCAL" />
       <updated>1672279186565</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="I^date">
+      <created>1672616654696</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1672616654696</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="UnknownFeatures">

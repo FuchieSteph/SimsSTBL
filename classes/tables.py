@@ -137,6 +137,8 @@ class CustomQTableView(QtWidgets.QTableView):
         self.ScrollHint(QtWidgets.QAbstractItemView.ScrollHint.EnsureVisible)
 
     def keyPressEvent(self, event):
+        s = event.text()
+
         if event.key() == QtCore.Qt.Key.Key_Return:
             self.signal.emit()
         elif event.key() == QtCore.Qt.Key.Key_Up:
@@ -145,5 +147,6 @@ class CustomQTableView(QtWidgets.QTableView):
         elif event.key() == QtCore.Qt.Key.Key_Down:
             print('down')
             self.signal_down.emit()
-        else:
+        elif s.isalpha():
             self.signal_key.emit()
+        return
