@@ -1,16 +1,18 @@
+import os
 import sys
 import PyQt6
 from PyQt6 import QtWidgets, QtCore
-from PyQt6.QtCore import QDir, QItemSelection, QSortFilterProxyModel, QThreadPool
-from PyQt6.QtGui import QAction, QIcon
+from PyQt6.QtCore import QDir, QSortFilterProxyModel, QThreadPool
+from PyQt6.QtGui import QAction
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import QSettings
 
 from classes.app_actions import App_Actions
+from classes.package import Package
 from helpers.definitions import *
 from classes.tables import CustomQTableView, TableModel
-from qt_material import apply_stylesheet
+from helpers.helpers import relative_path
 
 
 class App(QMainWindow, App_Actions):
@@ -34,8 +36,12 @@ class App(QMainWindow, App_Actions):
         self.first_load = 1
         self.logs = []
         self.threadpool = QThreadPool()
-
+        self.visible = False
         self.load_ui()
+
+        for arg in sys.argv:
+            if arg.endswith(".package"):
+                self.load_package(arg)
 
     def createButton(self, frame, text, func):
         button = QtWidgets.QPushButton(frame)
@@ -77,14 +83,6 @@ class App(QMainWindow, App_Actions):
 
         for button in self.buttons:
             self.buttons[button].setDisabled(False)
-
-    def start_editing(self):
-        index = (self.table.selectionModel().currentIndex())
-        current_row = index.row()
-        model_index = index.sibling(current_row, TRANSLATION_INDEX)
-
-        self.table.setCurrentIndex(model_index)
-        self.table.edit(model_index)
 
     def init_settings(self):
         settings = QSettings("SimsStbl", "settings")
@@ -134,10 +132,7 @@ class App(QMainWindow, App_Actions):
         self.table = CustomQTableView()
         self.table.setFrameStyle(QtWidgets.QFrame.Shape(0x0001))
         self.table.setAlternatingRowColors(True)
-        self.table.signal_up.connect(lambda: self.arrowkey(-1))
-        self.table.signal_down.connect(lambda: self.arrowkey(1))
-        self.table.signal.connect(lambda: self.arrowkey(1))
-        self.table.signal_key.connect(self.start_editing)
+        self.table.signal_enter.connect(self.arrowkey)
 
         self.right_container.addWidget(self.table)
         self.right_container.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
@@ -188,16 +183,19 @@ class App(QMainWindow, App_Actions):
 
     def arrowkey(self, num):
         try:
-            index = (self.table.selectionModel().currentIndex())
-            value = index.sibling(index.row(), index.column()).data()
-            current_row = index.row()
-            current_column = index.column()
+            if num != 0:
+                index = (self.table.selectionModel().currentIndex())
+                value = index.sibling(index.row(), index.column()).data()
+                current_row = index.row()
 
-            if (current_row == 0 and num == -1) or (num == 1 and current_row == len(self.package.model._data) - 1):
-                return
+                if (current_row == 0 and num == -1) or (num == 1 and current_row == len(self.package.model._data) - 1):
+                    return
 
-            self.table.clearSelection()
-            self.table.selectRow(current_row + num)
+                self.table.clearSelection()
+                self.table.selectRow(current_row + num)
+
+                model_index = index.sibling(current_row + num, TRANSLATION_INDEX)
+                self.table.setCurrentIndex(model_index)
 
             self.print_selection()
 
@@ -219,7 +217,7 @@ class App(QMainWindow, App_Actions):
         self.createMenuElement('translatefolder', 'exit.png', '&Translate Folder with Google Translate', '',
                                'Translate a full folder automatically',
                                self.translate_folder,
-                               'fileMenu')
+                               'fileMenu', False, False)
 
         self.createMenuElement('savetranslation', 'exit.png', '&Save Translation', 'Ctrl+S', 'Save Translation',
                                self.save_translation,
@@ -233,7 +231,7 @@ class App(QMainWindow, App_Actions):
         self.createMenuElement('translate', 'exit.png', '&Translate with Google translate', '',
                                'Translate with Google Translate',
                                self.translate_google,
-                               'translationsMenu', False, False)
+                               'translationsMenu')
 
         self.createMenuElement('search', 'exit.png', '&Search and Replace', 'Ctrl+F', 'Search and replace',
                                self.search_replace,
@@ -279,7 +277,7 @@ class App(QMainWindow, App_Actions):
                                'fileMenu', False, False)
 
         self.createMenuElement('settings', 'exit.png', '&Settings', 'Ctrl+Q', 'Settings',
-                               self.update_settings,
+                               self.show_settings,
                                'settingsMenu', False, False)
 
         self.statusBar()
@@ -301,11 +299,10 @@ class App(QMainWindow, App_Actions):
         self.table.setColumnHidden(1, True)
 
         self.table.setSelectionBehavior(PyQt6.QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows)
+
+        self.visible = True
         self.table.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
         self.table.customContextMenuRequested['QPoint'].connect(self.show_table_menu)
-
-        self.table.clicked.connect(self.print_selection)
-        self.table.selectionModel().currentChanged.connect(self.print_selection)
 
         if not package.isQuick:
             loadTranslation = self.checkDatabase()
@@ -314,15 +311,18 @@ class App(QMainWindow, App_Actions):
                 self.load_translation(loadTranslation)
                 self.package.database_path = loadTranslation
 
-            self.proxy_model = QSortFilterProxyModel()
-            self.proxy_model.setFilterKeyColumn(STATE_INDEX)
+        self.proxy_model = QSortFilterProxyModel()
+        self.proxy_model.setFilterKeyColumn(STATE_INDEX)
 
-            self.proxy_model.setSourceModel(package.model)
-            self.table.setModel(self.proxy_model)
+        self.proxy_model.setSourceModel(package.model)
+        self.table.setModel(self.proxy_model)
 
-            if not self.loaded:
-                self.enableButtons()
-                self.loaded = True
+        self.table.clicked.connect(self.print_selection)
+        self.table.selectionModel().currentChanged.connect(self.print_selection)
+
+        if not self.loaded:
+            self.enableButtons()
+            self.loaded = True
 
         self.setCentralWidget(self.centralwidget)
 
@@ -331,14 +331,17 @@ class App(QMainWindow, App_Actions):
             self.first_load = 0
 
     def print_selection(self):
-        index = (self.table.selectionModel().currentIndex())
+        try:
+            index = self.proxy_model.mapToSource(self.table.selectionModel().currentIndex())
 
-        value = index.sibling(index.row(), index.column()).data()
-        row = self.package.model._data[index.row()]
+            value = index.sibling(index.row(), index.column()).data()
+            row = self.package.model._data[index.row()]
 
-        self.base_zone.setPlainText(row[BASE_INDEX])
-        self.translate_zone.setPlainText(row[TRANSLATION_INDEX])
-
+            self.base_zone.setPlainText(row[BASE_INDEX])
+            self.translate_zone.setPlainText(row[TRANSLATION_INDEX])
+        except:
+            pass
+        
     def update_data(self):
         index = (self.table.selectionModel().currentIndex())
         text = self.translate_zone.toPlainText()
@@ -434,12 +437,27 @@ class App(QMainWindow, App_Actions):
 
             if state > -1:
                 for i in self.table.selectionModel().selectedRows():
-                    self.package.model.updateState(i.row(), state)
+                    index = self.proxy_model.mapToSource(i)
+                    self.package.model.updateState(index.row(), state)
 
+
+try:
+    from ctypes import windll  # Only exists on Windows.
+
+    myappid = 'mycompany.myproduct.subproduct.version'
+    windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+except ImportError:
+    pass
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    apply_stylesheet(app, theme='theme.xml', invert_secondary=True, css_file='styles.css')
-    ex = App()
+    with open(relative_path("style.qss"), "r") as f:
+        app = QApplication(sys.argv)
+        app.setWindowIcon(QIcon(relative_path('icon.ico')))
+        app.setStyle('Fusion')
+        app.setStyleSheet(f.read())
+        # apply_stylesheet(app, theme='theme.xml')
 
-    sys.exit(app.exec())
+        # apply_stylesheet(app, theme='theme.xml', invert_secondary=True, css_file=relative_path('styles.css'))
+        ex = App()
+
+        sys.exit(app.exec())

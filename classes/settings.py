@@ -1,6 +1,6 @@
 from PyQt6 import QtGui, QtWidgets, QtCore
 from PyQt6.QtWidgets import *
-from PyQt6.QtCore import QSettings
+from PyQt6.QtCore import QSettings, pyqtSignal
 
 
 class SettingsWindow(QWidget):
@@ -8,6 +8,7 @@ class SettingsWindow(QWidget):
     This "window" is a QWidget. If it has no parent, it
     will appear as a free-floating window as we want.
     """
+    submitClicked = pyqtSignal(str, str)
 
     def __init__(self):
         super().__init__()
@@ -30,10 +31,10 @@ class SettingsWindow(QWidget):
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setContentsMargins(0, 0, -1, 9)
 
-        self.lineEdit = QtWidgets.QLineEdit(self)
-        self.lineEdit.setText(self.settings.value("DatabasePath"))
+        self.DirField = QtWidgets.QLineEdit(self)
+        self.DirField.setText(self.settings.value("DatabasePath"))
 
-        self.horizontalLayout.addWidget(self.lineEdit)
+        self.horizontalLayout.addWidget(self.DirField)
         self.browseButton = QtWidgets.QToolButton(self)
         self.browseButton.clicked.connect(self.setDirPath)
         self.browseButton.setText('...')
@@ -50,10 +51,10 @@ class SettingsWindow(QWidget):
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setContentsMargins(0, 0, -1, 9)
 
-        self.lineEdit2 = QtWidgets.QLineEdit(self)
-        self.lineEdit2.setText(self.settings.value("SourcePath"))
+        self.SourceField = QtWidgets.QLineEdit(self)
+        self.SourceField.setText(self.settings.value("SourcePath"))
 
-        self.horizontalLayout.addWidget(self.lineEdit2)
+        self.horizontalLayout.addWidget(self.SourceField)
         self.browseButton = QtWidgets.QToolButton(self)
         self.browseButton.clicked.connect(self.setSourcePath)
         self.browseButton.setText('...')
@@ -66,7 +67,7 @@ class SettingsWindow(QWidget):
         self.buttonBox.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.buttonBox.setStandardButtons(
             QtWidgets.QDialogButtonBox.StandardButton.Save)
-        self.buttonBox.clicked.connect(self.close)
+        self.buttonBox.clicked.connect(self.submit_signal)
 
         self.buttonBox.setObjectName("buttonBox")
         self.verticalLayout.addWidget(self.buttonBox)
@@ -76,7 +77,7 @@ class SettingsWindow(QWidget):
                                                         self.settings.value("DatabasePath"))
 
         if self.dirpath != '':
-            self.lineEdit.setText(self.dirpath)
+            self.DirField.setText(self.dirpath)
 
         self.settings.setValue("DatabasePath", self.dirpath)
 
@@ -85,6 +86,10 @@ class SettingsWindow(QWidget):
                                                            self.settings.value("SourcePath"))
 
         if self.sourcePath != '':
-            self.lineEdit2.setText(self.sourcePath)
+            self.SourceField.setText(self.sourcePath)
 
         self.settings.setValue("SourcePath", self.sourcePath)
+
+    def submit_signal(self):
+        self.submitClicked.emit(self.DirField.text(), self.SourceField.text())
+        self.close()

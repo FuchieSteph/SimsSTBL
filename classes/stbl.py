@@ -14,17 +14,17 @@ class StblReader:
         result = list(filter(lambda v: v[KEY_INDEX] == key and v[INSTANCE_INDEX][-8:] == self.instance[-8:], self.DATA))
         return self.DATA.index(result[0]) if len(result) > 0 else None
 
-    def loadEmptyStrings(self, choice):
-        i = 0
+    def loadEmptyStrings(self, choice, base_index, to_index, lang):
 
-        for _ in range(len(self.DATA['keys'])):
+        for data in self.DATA:
             if choice == 0:
-                self.DATA['data'][i][TRANSLATION_INDEX] = ''
+                data[to_index] = ''
 
             else:
-                self.DATA['data'][i][TRANSLATION_INDEX] = self.DATA['data'][i][1]
+                data[to_index] = data[base_index]
 
-            i = i + 1
+            if to_index == TRANSLATION_INDEX:
+                data[INSTANCE_INDEX] = data[INSTANCE_INDEX].replace('00', LANGS[lang])
 
         return self.DATA
 

@@ -2,7 +2,6 @@ import PyQt6
 from PyQt6 import QtCore, QtWidgets
 from PyQt6.QtGui import QColor
 from PyQt6.QtCore import *
-from PyQt6.QtWidgets import QTableWidget
 
 from helpers.definitions import *
 
@@ -26,7 +25,8 @@ class TableModel(QtCore.QAbstractTableModel):
 
     def search_position(self, data):
         def filter_data(v):
-            if v[KEY_INDEX] == data['id'] and (v[BASE_INDEX] == data['base'] or data['base'] is None):
+            if v[KEY_INDEX] == data['id'] and (
+                    v[BASE_INDEX] == data['base'] or data['base'] is None or v[BASE_INDEX] == v[TRANSLATION_INDEX]):
                 return True
             elif v[BASE_INDEX] == data['base']:
                 return True
@@ -85,12 +85,14 @@ class TableModel(QtCore.QAbstractTableModel):
 
     def search_replace(self, search, replace):
         matches = self.search(search)
+        i = 0
         if matches is not None:
+            i = i + 1
             for index in matches:
                 self._data[index][TRANSLATION_INDEX] = self._data[index][TRANSLATION_INDEX].replace(search, replace)
                 self._data[index][STATE_INDEX] = TO_VALIDATE_STATE
 
-        return len(matches) if matches is not None else 0
+        return i if matches is not None else 0
 
     def replaceData(self, string, data):
 
@@ -127,26 +129,17 @@ class MyProxyModel(QSortFilterProxyModel):
 
 
 class CustomQTableView(QtWidgets.QTableView):
-    signal = QtCore.pyqtSignal()
-    signal_up = QtCore.pyqtSignal()
-    signal_down = QtCore.pyqtSignal()
-    signal_key = QtCore.pyqtSignal()
+    signal_enter = QtCore.pyqtSignal(int)
 
     def __init__(self, *args, **kwargs):
         QtWidgets.QTableView.__init__(self, *args, **kwargs)
         self.ScrollHint(QtWidgets.QAbstractItemView.ScrollHint.EnsureVisible)
 
     def keyPressEvent(self, event):
-        s = event.text()
+        super(QtWidgets.QTableView, self).keyPressEvent(event)
 
         if event.key() == QtCore.Qt.Key.Key_Return:
-            self.signal.emit()
-        elif event.key() == QtCore.Qt.Key.Key_Up:
-            print('up')
-            self.signal_up.emit()
-        elif event.key() == QtCore.Qt.Key.Key_Down:
-            print('down')
-            self.signal_down.emit()
-        elif s.isalpha():
-            self.signal_key.emit()
-        return
+            self.signal_enter.emit(1)
+
+        elif event.key() == QtCore.Qt.Key.Key_Up or event.key() == QtCore.Qt.Key.Key_Down:
+            self.signal_enter.emit(0)

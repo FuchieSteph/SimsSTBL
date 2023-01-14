@@ -138,24 +138,23 @@ class App_Actions:
         with open(import_path[0], 'r', newline='', encoding='utf-8') as f:
             self.package.load_csv_translation(csv.reader(f, delimiter=';'))
 
-    def load_package(self):
-        path = \
-            QFileDialog.getOpenFileName(self, 'Open the package to translate', self.sourcepath,
-                                        "Packages files (*.package)")[0]
+    def load_package(self, path=False):
+        if path == False:
+            path = \
+                QFileDialog.getOpenFileName(self, 'Open the package to translate', self.sourcepath,
+                                            "Packages files (*.package)")[0]
 
-        if path == '':
+            if path == '':
+                return
+
+        lang, ok = QInputDialog.getItem(self, "Language Selection", "Select the lang to load", LANG_LIST, 5, False)
+
+        if not ok:
             return
-
-        lang = \
-            QInputDialog.getItem(self, "Language Selection", "Select the lang to load", LANG_LIST, 5, False)[0]
 
         self.package = Package(path, lang, False)
 
-        if self.package.isLoaded == 'choice':
-            choice = self.raiseMessage('This package doesn\'t contain the following strings : ' + self.package.lang,
-                                       'Would you like to copy the English strings ?', 0)
-
-        elif self.package.isLoaded:
+        if self.package.isLoaded and len(self.package.DATA) > 0:
             self.sourcepath = self.package.filepath
             self.write_logs(self.package.filepath + ' loaded', True)
             self.load_table(self.package)
@@ -231,6 +230,7 @@ class App_Actions:
     def translate(self, progress_callback, file, lang, path):
         if path is not None:
             package = Package(os.path.join(path, file), lang, True)
+
         else:
             package = self.package
 
@@ -291,11 +291,15 @@ class App_Actions:
                 # Execute
                 self.threadpool.start(worker)
 
-    def update_settings(self):
+    def show_settings(self):
         if self.params is None:
             self.params = SettingsWindow()
         self.params.show()
-        self.sourcepath = self.settings.value("SourcePath")
+        self.params.submitClicked.connect(self.update_settings)
+
+    def update_settings(self, trans, source):
+        self.dirpath = trans
+        self.sourcepath = source
 
     def search_replace(self):
         if self.search is None:

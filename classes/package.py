@@ -3,6 +3,7 @@ import ntpath
 from functools import reduce
 
 from s4py.package import *
+from s4py.resource import Resource, ResourceID
 from s4py.utils import BinPacker
 
 from helpers import helpers
@@ -19,8 +20,11 @@ class Package:
         self.DATA = []
         self.isQuick = isQuick
         self.model = {}
-        self.isLoaded = self.readPackage()
+
+        data = self.readPackage()
+        self.isLoaded = data[0]
         self.database_path = None
+        self.createSTBL = data[1]
 
     def getFilename(self):
         return ntpath.basename(self.filepath).replace('_' + self.lang, '').split('.')[0]
@@ -28,6 +32,7 @@ class Package:
     def readPackage(self):
         dbfile = open_package(self.filepath)
         match = False
+        match_en = False
 
         self.DATA = []
 
@@ -40,6 +45,9 @@ class Package:
             if type != "220557da" or (lang != LANGS[self.lang] and lang != LANGS['ENG_US']):
                 continue
 
+            if lang == LANGS['ENG_US']:
+                match_en = True
+
             if lang == LANGS[self.lang]:
                 match = True
 
@@ -51,16 +59,19 @@ class Package:
         dbfile.close()
 
         if len(self.DATA) == 0:
-            return False
+            return [False, False]
 
-        elif not match and not self.isQuick:
-            return 'choice'
+        if not match_en:
+            self.loadEmptyStrings(1, TRANSLATION_INDEX, BASE_INDEX)
 
-        return True
+        elif not match:
+            self.loadEmptyStrings(1, BASE_INDEX, TRANSLATION_INDEX)
 
-    def loadEmptyStrings(self, choice):
-        stbl_reader = StblReader(None, self.DATA, None)
-        self.DATA = stbl_reader.loadEmptyStrings(choice)
+        return [True, not match]
+
+    def loadEmptyStrings(self, choice, base_index, to_index):
+        stbl_reader = StblReader(None, self.DATA, None, None)
+        self.DATA = stbl_reader.loadEmptyStrings(1, base_index, to_index, self.lang)
 
     def load_translation(self, path):
         with open(path, 'r') as f:
@@ -103,21 +114,30 @@ class Package:
 
     def export(self, replace, export_path):
 
-        temp_name = self.filepath.replace('.package', '_new.package') if replace else export_path
+        temp_name = '!' + self.filepath.replace('.package', '_new.package') if replace else export_path
         dbfile_old = open_package(self.filepath)
         dbfile_new = open_package(temp_name, 'w')
+        id_create = ''
 
         for entry in dbfile_old.scan_index(None):
             idx = dbfile_old[entry]
             type = "%08x" % idx.id.type
             instance = "%016x" % idx.id.instance
+            group = "%08x" % idx.id.group
             lang = instance[:2]
+
+            if type == "220557da" and lang == LANGS['ENG_US']:
+                new_instance = LANGS[self.lang] + instance[2:]
+                id_create = ResourceID(group=idx.id.group, instance=int(new_instance, 16), type=idx.id.type)
 
             if replace is True and (type != "220557da" or lang != LANGS[self.lang]):
                 dbfile_new.put(idx.id, idx.content)
 
             elif lang == LANGS[self.lang]:
                 self.writePackage(dbfile_new, idx.id, instance)
+
+        if self.createSTBL:
+            self.writePackage(dbfile_new, id_create, self.DATA[0][INSTANCE_INDEX])
 
         dbfile_new.commit()
 
@@ -138,7 +158,13 @@ class Package:
 
     def writePackage(self, dbfile2, id, instance=None):
         data_list = list(filter(lambda x: x[INSTANCE_INDEX] == instance, self.DATA))
+        if len(data_list) == 0:
+            return
+
         file_totalchar = reduce(count_chars, data_list)
+
+        if type(file_totalchar) is not int:
+            return
 
         f = BinPacker(bytes())
         f.put_strz('STBL')
@@ -146,7 +172,7 @@ class Package:
         f.put_uint8(0)  # Compressed
         f.put_uint64(len(data_list))  # numEntries
         f.put_uint16(0)  # Flag
-        f.put_uint32(file_totalchar)  # mnStringLength
+        f.put_uint32(file_totalchar + len(data_list))  # mnStringLength
 
         for data in data_list:
             nbChar = len(data[TRANSLATION_INDEX].encode('utf-8'))
@@ -157,4 +183,5 @@ class Package:
 
         f.raw.seek(0)
         dbfile2.put(id, f.raw.getvalue())
+
         f.close()
