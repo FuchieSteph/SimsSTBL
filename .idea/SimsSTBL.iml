@@ -4,6 +4,14 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/venv2" />
       <excludeFolder url="file://$MODULE_DIR$/tests" />
+      <excludeFolder url="file://$MODULE_DIR$/venv" />
+      <excludeFolder url="file://$MODULE_DIR$/.venv/Include" />
+      <excludeFolder url="file://$MODULE_DIR$/.venv/Lib" />
+      <excludeFolder url="file://$MODULE_DIR$/.venv/Scripts" />
+      <excludeFolder url="file://$MODULE_DIR$/build/main/localpycs" />
+      <excludeFolder url="file://$MODULE_DIR$/build/test/localpycs" />
+      <excludeFolder url="file://$MODULE_DIR$/database" />
+      <excludeFolder url="file://$MODULE_DIR$/translations_old" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.10 (SimsSTBL) (2)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

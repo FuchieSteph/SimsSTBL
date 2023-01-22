@@ -14,64 +14,91 @@ from helpers.helpers import count_chars
 
 
 class Package:
-    def __init__(self, filepath, lang, isQuick):
+    def __init__(self, filepath, lang, isQuick, isMulti=False, data=None):
         self.lang = lang
         self.filepath = filepath
-        self.DATA = []
+        self.DATA = data[0] if isMulti else []
         self.isQuick = isQuick
+        self.multipath = data[1] if isMulti else None
         self.model = {}
+        self.isMulti = isMulti
 
-        data = self.readPackage()
-        self.isLoaded = data[0]
+        if not self.isMulti:
+            data = self.readPackage()
+            self.isLoaded = data[0]
+            self.createSTBL = data[1]
+            self.flatten_data = self.flatten(self.DATA, [])
+        else:
+            self.isLoaded = True
+            self.createSTBL = False
+            self.flatten_data = self.flatten(self.DATA, [])
+
         self.database_path = None
-        self.createSTBL = data[1]
+
+    def getFilePath(self):
+        return ntpath.dirname(self.filepath)
 
     def getFilename(self):
         return ntpath.basename(self.filepath).replace('_' + self.lang, '').split('.')[0]
 
+    def getPackagename(self):
+        return ntpath.basename(self.filepath).split('.')[0]
+
+    def flatten(self, data, new_data):
+        if isinstance(data, dict):
+            for f in data.items():
+                new_data = self.flatten(f[1], new_data)
+
+        elif isinstance(data, list):
+            if len(data) == 0:
+                return []
+
+            if data[BASE_INDEX] is None:
+                data[BASE_INDEX] = data[TRANSLATION_INDEX]
+
+            elif data[TRANSLATION_INDEX] is None:
+                data[TRANSLATION_INDEX] = data[BASE_INDEX]
+
+            new_data.append(data)
+
+        return new_data
+
     def readPackage(self):
         dbfile = open_package(self.filepath)
         match = False
-        match_en = False
 
-        self.DATA = []
+        self.DATA = {}
 
-        for entry in dbfile.scan_index(None):
-            idx = dbfile[entry]
-            type = "%08x" % idx.id.type
-            instance = "%016x" % idx.id.instance
-            lang = instance[:2]
+        try:
+            for entry in dbfile.scan_index(None):
+                idx = dbfile[entry]
+                type = "%08x" % idx.id.type
+                instance = "%016x" % idx.id.instance
+                lang = instance[:2]
 
-            if type != "220557da" or (lang != LANGS[self.lang] and lang != LANGS['ENG_US']):
-                continue
+                if type != "220557da" or (lang != LANGS[self.lang] and lang != LANGS['ENG_US']):
+                    continue
 
-            if lang == LANGS['ENG_US']:
-                match_en = True
+                if lang == LANGS[self.lang]:
+                    match = True
 
-            if lang == LANGS[self.lang]:
-                match = True
+                content = idx.content
 
-            content = idx.content
-            stbl_reader = StblReader(content, self.DATA, lang == LANGS[self.lang], instance)
-            self.DATA = stbl_reader.readStbl()
-            self.id = idx.id
+                stbl_reader = StblReader(content, self.DATA, lang == LANGS[self.lang], LANGS['ENG_US'] + instance[2:],
+                                         self.filepath,
+                                         self.getPackagename())
+                self.DATA = stbl_reader.readStbl()
+                self.id = idx.id
 
-        dbfile.close()
+            dbfile.close()
 
-        if len(self.DATA) == 0:
+            if len(self.DATA) == 0:
+                return [False, False]
+
+        except:
             return [False, False]
 
-        if not match_en:
-            self.loadEmptyStrings(1, TRANSLATION_INDEX, BASE_INDEX)
-
-        elif not match:
-            self.loadEmptyStrings(1, BASE_INDEX, TRANSLATION_INDEX)
-
         return [True, not match]
-
-    def loadEmptyStrings(self, choice, base_index, to_index):
-        stbl_reader = StblReader(None, self.DATA, None, None)
-        self.DATA = stbl_reader.loadEmptyStrings(1, base_index, to_index, self.lang)
 
     def load_translation(self, path):
         with open(path, 'r') as f:
@@ -113,8 +140,7 @@ class Package:
             f.close()
 
     def export(self, replace, export_path):
-
-        temp_name = '!' + self.filepath.replace('.package', '_new.package') if replace else export_path
+        temp_name = self.filepath.replace('.package', '_new.package') if replace else export_path
         dbfile_old = open_package(self.filepath)
         dbfile_new = open_package(temp_name, 'w')
         id_create = ''
@@ -157,7 +183,9 @@ class Package:
             return new_path
 
     def writePackage(self, dbfile2, id, instance=None):
-        data_list = list(filter(lambda x: x[INSTANCE_INDEX] == instance, self.DATA))
+        base_instance = LANGS['ENG_US'] + instance[2:]
+
+        data_list = list(filter(lambda x: x[INSTANCE_INDEX] == base_instance, self.DATA))
         if len(data_list) == 0:
             return
 

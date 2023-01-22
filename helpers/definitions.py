@@ -5,7 +5,7 @@ LANGS = {
     "DAN_DK": "04",
     "DUT_NL": "05",
     "FIN_FI": "06",
-    "FRA_FR": "07",
+    "FRE_FR": "07",
     "GER_DE": "08",
     "ITA_IT": "0B",
     "JPN_JP": "0C",
@@ -24,7 +24,7 @@ LANG_LIST = [
     "DAN_DK",
     "DUT_NL",
     "FIN_FI",
-    "FRA_FR",
+    "FRE_FR",
     "GER_DE",
     "ITA_IT",
     "JPN_JP",
@@ -50,6 +50,8 @@ INSTANCE_INDEX = 2
 BASE_INDEX = 3
 TRANSLATION_INDEX = 4
 STATE_INDEX = 5
+PATH_INDEX = 6
+FILENAME_INDEX = 7
 
 AUTO_STATE = 3
 VALIDATED_STATE = 2

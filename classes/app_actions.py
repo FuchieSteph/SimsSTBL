@@ -9,10 +9,13 @@ from translatepy.translators import GoogleTranslateV2
 
 import csv
 
+from classes.dictionnaries import DictionnariesWindow
 from classes.search_replace import SearchReplaceWindow
 from classes.settings import SettingsWindow
+from classes.tables import TableModel
 from helpers.definitions import *
 from classes.package import Package
+from helpers.helpers import relative_path
 
 
 class WorkerSignals(QObject):
@@ -99,20 +102,39 @@ class App_Actions:
                 return self.dirpath + '/' + filename + '_auto_' + self.package.lang + '.json'
 
     def export_package(self):
-        export_path = self.package.filepath.replace('.package', '_' + self.package.lang + '.package')
+        export_path = self.package.getFilePath() + '/!' + self.package.getFilename() + '_' + self.package.lang + '.package'
 
-        if not self.package.isQuick:
-            export_path = QFileDialog.getSaveFileName(self, 'Open file', export_path, "Package (*.package)")[0]
-            if export_path == '':
-                return
+        if not self.package.isMulti:
+            if not self.package.isQuick:
+                export_path = QFileDialog.getSaveFileName(self, 'Open file', export_path, "Package (*.package)")[0]
+                if export_path == '':
+                    return
 
-            self.write_logs('Translation package exported : ' + export_path)
+                self.write_logs('Translation package exported : ' + export_path)
 
-        self.package.export(False, export_path)
+            self.package.export(False, export_path)
+
+        else:
+            for package in self.package.multipath:
+                self.write_logs(package.getFilename() + ': translation exported')
+
+                export_path = package.getFilePath() + '/!' + package.getFilename() + '_' + package.lang + '.package'
+                package.export(False, export_path)
+
+            self.raiseMessage('Export complete', '', 1)
 
     def export_replace_package(self):
-        self.write_logs('Translation package saved')
-        self.package.export(True, None)
+
+        if not self.package.isMulti:
+            self.package.export(True, None)
+            self.write_logs('Translation package saved')
+
+        else:
+            for package in self.package.multipath:
+                package.export(True, None)
+                self.write_logs(package.getFilename() + ': translation exported')
+
+            self.raiseMessage('Export complete', '', 1)
 
     def export_csv(self):
         name = self.package.getFilename()
@@ -123,7 +145,7 @@ class App_Actions:
 
         with open(export_path[0], 'w', newline='', encoding='UTF-8') as f:
             writer = csv.writer(f, delimiter=";")
-            writer.writerow(['KEY', 'INSTANCE', 'EN', 'FR', 'STATE'])
+            writer.writerow(['KEY', 'INSTANCE', 'INSTANCE', 'EN', 'FR', 'STATE'])
             writer.writerows(self.package.model._data)
             f.close()
 
@@ -177,10 +199,18 @@ class App_Actions:
         else:
             self.write_logs('Translation loaded: ' + path)
 
-    def save_translation(self, ask=False):
+    def save_translation(self, ask=False, db=False):
         name = self.package.getFilename()
 
-        if (not self.package.isQuick and self.package.database_path is None) or ask == True:
+        if db == True:
+            export_path = self.dbfolder + '/' + 'db_' + self.package.lang + '.json'
+
+
+        elif self.package.isQuick:
+            export_path = self.settings.value(
+                "DatabasePath") + '/' + name + '_auto_' + self.package.lang + '.json'
+
+        elif (not self.package.isQuick and self.package.database_path is None) or ask == True:
             export_path = QFileDialog.getSaveFileName(self, 'Save a translation', self.settings.value(
                 "DatabasePath") + '/' + name + '_' + self.package.lang + '.json',
                                                       "JSON (*.json)")[0]
@@ -189,12 +219,7 @@ class App_Actions:
                 return
 
             self.package.database_path = export_path
-
             self.write_logs('Translation saved: ' + export_path)
-
-        elif self.package.isQuick:
-            export_path = self.settings.value(
-                "DatabasePath") + '/' + name + '_auto_' + self.package.lang + '.json'
 
         else:
             export_path = self.package.database_path
@@ -228,6 +253,7 @@ class App_Actions:
             self.write_logs('Translation loaded')
 
     def translate(self, progress_callback, file, lang, path):
+
         if path is not None:
             package = Package(os.path.join(path, file), lang, True)
 
@@ -265,9 +291,9 @@ class App_Actions:
 
         return file + ' correctly translated'
 
-    def translate_folder(self):
+    def open_folder(self):
         path = \
-            QFileDialog.getExistingDirectory(self, 'Select the folder to translate', self.sourcepath)
+            QFileDialog.getExistingDirectory(self, 'Select the folder to open', self.sourcepath)
 
         if path == '':
             return
@@ -278,23 +304,75 @@ class App_Actions:
             self.write_logs('No lang was selected, translation abandoned', True)
             return
 
-        self.write_logs('Translation started... Please wait...', True)
+        data = {}
+        packages = []
 
-        for file in os.listdir(path):
-            if file.endswith(".package"):
-                # Pass the function to execute
-                worker = Worker(self.translate, file, lang, path)
-                worker.signals.result.connect(self.print_output)
-                worker.signals.finished.connect(self.thread_complete)
-                worker.signals.progress.connect(self.progress_fn)
+        for subdir, dirs, files in os.walk(path):
 
-                # Execute
-                self.threadpool.start(worker)
+            for file in files:
+                if file.endswith(".package") and not file.startswith('!'):
+                    self.write_logs('Opening :' + subdir + os.sep + file)
+
+                    pack = Package(subdir + os.sep + file, lang, True)
+                    if pack.isLoaded:
+                        if file not in data:
+                            data[file] = {}
+
+                        data[file] = data[file] | pack.DATA[file]
+                        packages.append(pack)
+                        self.write_logs(subdir + os.sep + file + ': loaded')
+
+        self.package = Package(os.path.join(path, os.path.dirname(path) + '.package'), lang, False, True,
+                               [data, packages])
+
+        self.load_table(self.package)
+
+    def build_dictionnaries(self, source, trans):
+        data = {}
+        packages = []
+        source_name = 'Strings_' + source + '.package'
+        trans_name = 'Strings_' + trans + '.package'
+
+        for subdir, dirs, files in os.walk(relative_path("database")):
+
+            for file in files:
+                if file == source_name or file == trans_name:
+                    self.write_logs('Opening :' + subdir + os.sep + file)
+
+                    pack = Package(subdir + os.sep + file, trans, True)
+
+                    if pack.isLoaded:
+                        if file not in data:
+                            data[file] = {}
+
+                        data[file] = data[file] | pack.DATA[file]
+                        packages.append(pack)
+                        self.write_logs(subdir + os.sep + file + ': loaded')
+
+            full_data = {}
+
+            # We loop through the file & instances & merge the dictionnaries
+            if source_name in data:
+                full_data = data[source_name]
+
+                for instance in data[trans_name].items():
+                    if instance[0] in full_data:
+                        for key in instance[1].items():
+                            if key[0] in full_data[instance[0]]:
+                                full_data[instance[0]][key[0]][TRANSLATION_INDEX] = key[1][TRANSLATION_INDEX]
+
+        self.package = Package(os.path.join(relative_path("database"), 'db_' + trans + '.package'), trans, True, True,
+                               [full_data, packages])
+
+        self.load_table(self.package)
+        self.save_translation(False, True)
+        self.initTable()
 
     def show_settings(self):
         if self.params is None:
             self.params = SettingsWindow()
         self.params.show()
+        self.params.buildClicked.connect(self.build_dictionnaries)
         self.params.submitClicked.connect(self.update_settings)
 
     def update_settings(self, trans, source):
@@ -307,6 +385,12 @@ class App_Actions:
 
         self.search.submitClicked.connect(self.process_search)
         self.search.show()
+
+    def search_dict(self):
+        if self.search_dict_w is None:
+            self.search_dict_w = DictionnariesWindow()
+
+        self.search_dict_w.show()
 
     def process_search(self, search, replace):
         nb = self.package.model.search_replace(search, replace)

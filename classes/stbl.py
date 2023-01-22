@@ -4,15 +4,20 @@ from helpers.definitions import *
 
 
 class StblReader:
-    def __init__(self, content, data, isTrans, instance):
+    def __init__(self, content, data, isTrans, instance, filepath, filename):
         self.content = content
         self.instance = instance
         self.isTrans = isTrans
         self.DATA = data
+        self.filepath = filepath
+        self.filename = filename + '.package'
 
     def search_position(self, key):
-        result = list(filter(lambda v: v[KEY_INDEX] == key and v[INSTANCE_INDEX][-8:] == self.instance[-8:], self.DATA))
-        return self.DATA.index(result[0]) if len(result) > 0 else None
+        if key in self.DATA[self.instance]:
+            return True
+
+        else:
+            return None
 
     def loadEmptyStrings(self, choice, base_index, to_index, lang):
 
@@ -49,22 +54,31 @@ class StblReader:
 
         for _ in range(numEntries):
             keyHash = f.get_uint32()
-            index = self.search_position(keyHash)
 
             flags = f.get_uint8()
             length = f.get_uint16()
             val = f.get_raw_bytes(length).decode('utf-8')
             char_count += len(val)
 
-            # FIRST TIME DATA IS LOADED = WE CREATE DATA
-            if index is None:
-                self.DATA.append([str("%08x" % keyHash).upper(), keyHash, self.instance, None, None, 0])
-                index = len(self.DATA) - 1
+            # FIRST TIME DATA IS LOADED = WE CREATE FILE
+            if not self.filename in self.DATA:
+                self.DATA[self.filename] = {}
+
+            # FIRST TIME DATA IS LOADED = WE CREATE INSTANCE
+            if not self.instance in self.DATA[self.filename]:
+                self.DATA[self.filename][self.instance] = {}
+
+            # NO KEY YET WE ADD IT
+            if not keyHash in self.DATA[self.filename][self.instance]:
+                self.DATA[self.filename][self.instance][keyHash] = ()
+                self.DATA[self.filename][self.instance][keyHash] = [str("%08x" % keyHash).upper(), keyHash,
+                                                                    self.instance, None, None,
+                                                                    0, self.filepath, self.filename]
 
             if self.isTrans:
-                self.DATA[index][TRANSLATION_INDEX] = val
-                self.DATA[index][INSTANCE_INDEX] = self.instance
+                self.DATA[self.filename][self.instance][keyHash][TRANSLATION_INDEX] = val
+                self.DATA[self.filename][self.instance][keyHash][INSTANCE_INDEX] = self.instance
             else:
-                self.DATA[index][BASE_INDEX] = val
+                self.DATA[self.filename][self.instance][keyHash][BASE_INDEX] = val
 
         return self.DATA

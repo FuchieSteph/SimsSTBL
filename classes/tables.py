@@ -12,15 +12,24 @@ class TableModel(QtCore.QAbstractTableModel):
         self._data = data
         self._header = header
 
-    def rowCount(self, index):
+    def rowCount(self, index=None):
         return len(self._data)
 
-    def columnCount(self, index):
-        return len(self._data[0])
+    def columnCount(self, index=None):
+        if self.rowCount() == 0:
+            return 0
+
+        else:
+            return len(self._data[0])
 
     def headerData(self, col, orientation, role):
+        # section is the index of the column/row.
         if orientation == PyQt6.QtCore.Qt.Orientation.Horizontal and role == Qt.ItemDataRole.DisplayRole:
             return self._header[col]
+
+        elif orientation == PyQt6.QtCore.Qt.Orientation.Vertical and role == Qt.ItemDataRole.DisplayRole:
+            return col + 1
+
         return None
 
     def search_position(self, data):
@@ -42,10 +51,14 @@ class TableModel(QtCore.QAbstractTableModel):
         return map(lambda x: self._data.index(x), result) if len(result) > 0 else None
 
     def data(self, index, role):
+
         row = self._data[index.row()]
         cell = row[index.column()]
 
         if role == Qt.ItemDataRole.BackgroundRole:
+
+            # print(row)
+
             if row[STATE_INDEX] == VALIDATED_STATE:
                 return QVariant(QColor.fromRgb(44, 165, 141))
             elif row[STATE_INDEX] == TO_VALIDATE_STATE:
@@ -63,6 +76,7 @@ class TableModel(QtCore.QAbstractTableModel):
             return cell
 
     def setData(self, index, value, role):
+
         base = self._data[index.row()][BASE_INDEX]
 
         if role == Qt.ItemDataRole.EditRole and index.column() == TRANSLATION_INDEX and value != '':
@@ -95,7 +109,6 @@ class TableModel(QtCore.QAbstractTableModel):
         return i if matches is not None else 0
 
     def replaceData(self, string, data):
-
         indexes = self.search_position(data)
 
         if indexes is not None:
@@ -105,6 +118,10 @@ class TableModel(QtCore.QAbstractTableModel):
 
     def updateState(self, row, state):
         self._data[row][STATE_INDEX] = state
+
+    def resetTranslation(self, row):
+        self._data[row][TRANSLATION_INDEX] = self._data[row][BASE_INDEX]
+        self._data[row][STATE_INDEX] = NO_STATE
 
     def flags(self, index):
         return Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsEditable
@@ -120,12 +137,68 @@ def map_to_json(n):
 
 
 class MyProxyModel(QSortFilterProxyModel):
-    def __init__(self):
-        super(MyProxyModel, self).__init__()
-        self.searchText = None
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._filters = dict()
 
-    def filterState(self, state):
-        return
+    @property
+    def filters(self):
+        return self._filters
+
+    def setFilter(self, expresion, column, erase=True):
+
+        if not column in self.filters or erase:
+            self.filters[column] = []
+
+        if expresion:
+            self.filters[column].append(expresion.lower())
+
+        self.invalidateFilter()
+
+    def clearFilters(self, column):
+        ignore = [STATE_INDEX, INSTANCE_INDEX, FILENAME_INDEX]
+        for key, regexes in list(self.filters.items()):
+            if key not in ignore:
+                del self.filters[key]
+
+        self.invalidateFilter()
+
+    def removeFilter(self, expresion, column):
+        if expresion is not None:
+            index = self.filters[column].index(expresion.lower())
+            del self.filters[column][index]
+
+            if len(self.filters[column]) == 0:
+                del self.filters[column]
+
+        else:
+            try:
+                print(self.filters)
+                del self.filters[column]
+            except:
+                pass
+
+        self.invalidateFilter()
+
+    def filterAcceptsRow(self, source_row, source_parent):
+
+        for key, regexes in self.filters.items():
+            ix = self.sourceModel().index(source_row, key, source_parent)
+            if ix.isValid():
+                text = self.sourceModel().data(ix, QtCore.Qt.ItemDataRole.DisplayRole)
+                match = False
+
+                if len(regexes) == 0:
+                    return True
+
+                for regex in regexes:
+                    if regex in text.lower():
+                        match = True
+
+                if not match:
+                    return False
+
+        return True
 
 
 class CustomQTableView(QtWidgets.QTableView):

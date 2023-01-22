@@ -23,6 +23,7 @@ a = Analysis(
 a.datas += [("icon.ico","icon.ico","DATA")]
 a.datas += [("style.qss","style.qss","DATA")]
 a.datas += Tree('./database', prefix='database')
+a.datas += Tree('./translations', prefix='translations')
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
@@ -32,11 +33,11 @@ exe = EXE(
     [],
     exclude_binaries=True,
     name='Sims 4 Mods Translator',
-    debug=True,
+    debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=True,
+    console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,

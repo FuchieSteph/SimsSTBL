@@ -68,3 +68,5 @@ libs/__pycache__/helpers.cpython-310.pyc
 libs/__pycache__/definitions.cpython-310.pyc
 .idea/workspace.xml
 *.xml
+/build/
+/database_old/
