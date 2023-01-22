@@ -5,132 +5,121 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3364c699-efa5-4e1b-86c4-ba989a117231" name="Changes" comment="UPdate">
-      <change afterPath="$PROJECT_DIR$/classes/dictionnaries.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dist/main/PyQt6/Qt6/bin/VCRUNTIME140_1.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/SimsSTBL.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SimsSTBL.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/Base/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/Base/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/EP01/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/EP01/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/EP02/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/EP02/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/EP03/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/EP03/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/EP04/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/EP04/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/EP05/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/EP05/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/EP06/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/EP06/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/EP07/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/EP08/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/EP09/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/EP10/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/EP11/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/EP12/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP01/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP01/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP02/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP02/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP03/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP03/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP04/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP04/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP05/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP05/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP06/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP06/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP07/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP07/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP08/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP08/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP09/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP09/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP10/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP10/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP11/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP11/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP12/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/GP12/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP01/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP01/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP02/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP02/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP03/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP03/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP04/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP04/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP05/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP05/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP06/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP06/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP07/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP07/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP08/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP08/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP09/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP09/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP10/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP10/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP11/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP11/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP12/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP12/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP13/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP13/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP14/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP14/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP15/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP15/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP16/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP16/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP17/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP17/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP18/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP18/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP20/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP20/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP22/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP22/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP23/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP23/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP24/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP24/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP26/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP26/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP32/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP32/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP33/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP33/Strings_FRE_FR.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP35/Strings_ENG_US.package" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/main/database/SP35/Strings_FRE_FR.package" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/main/Analysis-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/Analysis-00.toc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/main/COLLECT-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/COLLECT-00.toc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/main/EXE-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/EXE-00.toc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/PKG-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/PKG-00.toc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/main/PYZ-00.pyz" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/PYZ-00.pyz" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/main/PYZ-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/PYZ-00.toc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/main/Sims 4 Mods Translator.exe" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/Sims 4 Mods Translator.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/main/Sims 4 Mods Translator.pkg" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/Sims 4 Mods Translator.pkg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/main/Tree-00.toc" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/Tree-00.toc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/main/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/base_library.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/main/warn-main.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/warn-main.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/main/xref-main.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/main/xref-main.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/app_actions.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes/app_actions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/package.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes/package.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/stbl.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes/stbl.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/tables.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes/tables.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/main/Sims 4 Mods Translator.exe" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/Sims 4 Mods Translator.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/VCRUNTIME140.dll" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/VCRUNTIME140.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/VCRUNTIME140_1.dll" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/VCRUNTIME140_1.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/_bz2.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/_bz2.pyd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/_ctypes.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/_ctypes.pyd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/_decimal.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/_decimal.pyd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/_hashlib.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/_hashlib.pyd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/_lzma.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/_lzma.pyd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/_multiprocessing.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/_multiprocessing.pyd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/_queue.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/_queue.pyd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/_socket.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/_socket.pyd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/_ssl.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/_ssl.pyd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/_uuid.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/_uuid.pyd" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/main/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/base_library.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/libcrypto-1_1.dll" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/libcrypto-1_1.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/libssl-1_1.dll" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/libssl-1_1.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/pyexpat.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/pyexpat.pyd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/python3.dll" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/python3.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/python310.dll" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/python310.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/select.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/select.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/main/database/database.txt" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/database/database.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/main/style.qss" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/style.qss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main/unicodedata.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/dist/main/unicodedata.pyd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/bin/MSVCP140.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/bin/MSVCP140_1.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/bin/MSVCP140_2.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/bin/Qt6Core.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/bin/Qt6Gui.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/bin/Qt6Network.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/bin/Qt6Pdf.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/bin/Qt6Svg.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/bin/Qt6Widgets.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/bin/VCRUNTIME140_1.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/bin/opengl32sw.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/plugins/generic/qtuiotouchplugin.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/plugins/iconengines/qsvgicon.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/plugins/imageformats/qgif.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/plugins/imageformats/qicns.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/plugins/imageformats/qico.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/plugins/imageformats/qjpeg.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/plugins/imageformats/qpdf.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/plugins/imageformats/qsvg.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/plugins/imageformats/qtga.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/plugins/imageformats/qtiff.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/plugins/imageformats/qwbmp.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/plugins/imageformats/qwebp.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/plugins/platforms/qminimal.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/plugins/platforms/qoffscreen.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/plugins/platforms/qwindows.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/plugins/styles/qwindowsvistastyle.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_ar.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_bg.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_ca.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_cs.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_da.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_de.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_en.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_es.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_fa.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_fi.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_fr.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_gd.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_he.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_hr.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_hu.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_it.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_ja.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_ko.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_lv.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_nl.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_nn.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_pl.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_pt_BR.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_ru.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_sk.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_tr.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_uk.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_zh_CN.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/Qt6/translations/qtbase_zh_TW.qm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/QtCore.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/QtGui.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/QtWidgets.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/PyQt6/sip.cp310-win_amd64.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/VCRUNTIME140.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/VCRUNTIME140_1.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/_bz2.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/_decimal.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/_hashlib.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/_lzma.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/_socket.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/_ssl.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/base_library.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/libcrypto-1_1.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/libssl-1_1.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/python3.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/python310.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/select.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/test.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/test/unicodedata.pyd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpers/definitions.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpers/definitions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.spec" beforeDir="false" afterPath="$PROJECT_DIR$/main.spec" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages_tester.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/style.qss" beforeDir="false" afterPath="$PROJECT_DIR$/style.qss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.spec" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -379,7 +368,14 @@
       <option name="project" value="LOCAL" />
       <updated>1672864181467</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="UPdate">
+      <created>1674424378902</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1674424378902</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -400,7 +396,8 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="I^date" />
-    <option name="LAST_COMMIT_MESSAGE" value="I^date" />
+    <MESSAGE value="UPdate" />
+    <option name="LAST_COMMIT_MESSAGE" value="UPdate" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

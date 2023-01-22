@@ -12,7 +12,6 @@ import csv
 from classes.dictionnaries import DictionnariesWindow
 from classes.search_replace import SearchReplaceWindow
 from classes.settings import SettingsWindow
-from classes.tables import TableModel
 from helpers.definitions import *
 from classes.package import Package
 from helpers.helpers import relative_path

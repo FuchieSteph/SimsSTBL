@@ -3,10 +3,9 @@ import ntpath
 from functools import reduce
 
 from s4py.package import *
-from s4py.resource import Resource, ResourceID
+from s4py.resource import ResourceID
 from s4py.utils import BinPacker
 
-from helpers import helpers
 from classes.stbl import StblReader
 from classes.tables import map_to_json
 from helpers.definitions import *

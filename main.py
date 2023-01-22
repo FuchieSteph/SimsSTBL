@@ -1,8 +1,7 @@
-import os
 import sys
 import PyQt6
 from PyQt6 import QtWidgets, QtCore
-from PyQt6.QtCore import QDir, QSortFilterProxyModel, QThreadPool, QRegularExpression, QAbstractTableModel
+from PyQt6.QtCore import QDir, QThreadPool
 from PyQt6.QtGui import QAction
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *

@@ -1,0 +1,18 @@
+            # We loop through the file & instances & merge the dictionnaries
+            for file in data.items():
+                for instance in data[file[0]].items():
+                    if instance[0] in full_data:
+                        for key in instance[1].items():
+                            if key[0] in full_data[instance[0]] and 'Strings_' + lang in file:
+                                full_data[instance[0]][key[0]][TRANSLATION_INDEX] = key[1][TRANSLATION_INDEX]
+                            elif 'Strings_ENG_US' in file:
+                                full_data[instance[0]][key[0]] = key[1]
+                    elif 'Strings_ENG_US' in file:
+                        full_data[instance[0]] = instance[1]
+
+            self.package = Package(os.path.join(path, 'db_' + lang + '.package'), lang, True, True,
+                                   [full_data, packages])
+
+            self.load_table(self.package)
+            self.save_translation(False, True)
+            self.initTable()

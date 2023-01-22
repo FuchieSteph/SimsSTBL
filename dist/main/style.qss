@@ -22,10 +22,12 @@ QHeaderView::section {
 
 QTableView {
     border-radius:5px;
+    text-align:center;
 }
 
 QTableView::items {
     border-bottom: 1px solid #d6d9dc;
+    text-align:center;
 }
 
 QMenuBar {
@@ -42,8 +44,6 @@ QMenu {
 
 QMenu::item {
 	color:black;
-	padding-top:10px;
-	padding-bottom: 10px;
 }
 
 QMenu::item:disabled {
